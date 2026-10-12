@@ -14,7 +14,6 @@ Evaluamos la seguridad de aplicaciones, APIs, sistemas con inteligencia artifici
 
 [![Sitio web](https://img.shields.io/badge/codegurex.com-315CF5?style=for-the-badge&logo=googlechrome&logoColor=FFFFFF)](https://codegurex.com/)
 [![Email](https://img.shields.io/badge/contacto-315CF5?style=for-the-badge&logo=gmail&logoColor=FFFFFF)](mailto:contacto@codegurex.com)
-[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=FFFFFF)](https://wa.me/593963223403)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=FFFFFF)](https://www.linkedin.com/in/codegurex/)
 
 </div>
