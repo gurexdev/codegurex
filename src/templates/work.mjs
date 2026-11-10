@@ -141,7 +141,8 @@ export function caseStudy(w, lang) {
     ? `<figure class="code"><div class="bar mono"><span>${t(w.codeCaption, lang)}</span><span>Python</span></div><pre><code>${esc(w.code)}</code></pre></figure>`
     : "";
 
-  const linkRow = w.link ? `<div class="actions">${external(w.link, tr("Ver evidencia pública", "View public evidence"), "btn btn-line")}</div>` : "";
+  const linkLabel = /github\.com/.test(w.link || "") ? tr("Ver el código", "View the code") : tr("Visitar el sitio", "Visit the site");
+  const linkRow = w.link ? `<div class="actions">${external(w.link, linkLabel, "btn btn-line")}</div>` : "";
 
   const body = `
 <section class="page-hero case-hero">
