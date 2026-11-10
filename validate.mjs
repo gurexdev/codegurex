@@ -1,119 +1,131 @@
-import { access, readFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+// Static validation of the generated site (run after `node build.mjs`).
+// Checks SEO metadata, hreflang reciprocity, links and assets, CSP compliance and basic accessibility.
+import { readdir, readFile, access } from "node:fs/promises";
+import { join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 
-await import("./generate-service-pages.mjs");
-
-const root = dirname(
-  new URL(import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, (value) =>
-    value.slice(1),
-  ),
-);
+const dist = fileURLToPath(new URL("./dist/", import.meta.url));
+const ORIGIN = "https://codegurex.com";
 const failures = [];
-let checkedIds = 0;
-const pages = [
-  "index.html",
-  "privacidad.html",
-  "auditoria-web.html",
-  "seo-tecnico.html",
-  "rendimiento-web.html",
-  "seguridad-web.html",
-  "seguridad-aplicaciones-ia.html",
-  "seguridad-apis.html",
-  "seguridad-agentes-ia.html",
-  "hardening-infraestructura-nube.html",
-  "codegurex-sentinel.html",
-  "caso-codegurex.html",
-  "nosotros.html",
-  "fundador.html",
-  "contacto.html",
-];
-for (const page of pages) {
-  const html = await readFile(resolve(root, page), "utf8");
-  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
-  checkedIds += ids.length;
-  const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
-  if (duplicates.length)
-    failures.push(
-      `${page}: duplicate IDs: ${[...new Set(duplicates)].join(", ")}`,
-    );
-  if (/href="#"/.test(html))
-    failures.push(`${page}: placeholder href="#" found`);
-  if (/<img(?![^>]*\salt=)[^>]*>/i.test(html))
-    failures.push(`${page}: image without alt text found`);
-  if (/\sstyle="[^"]*"/i.test(html))
-    failures.push(
-      `${page}: inline style found but CSP only allows self-hosted styles`,
-    );
-  for (const match of html.matchAll(
-    /(?:src|href)="((?!https?:|mailto:|tel:|#)[^"]+)"/g,
-  )) {
-    const relative = decodeURIComponent(match[1].split(/[?#]/)[0]).replace(
-      /^\//,
-      "",
-    );
-    if (!relative || relative === "site.webmanifest") continue;
-    try {
-      await access(resolve(root, relative));
-    } catch {
-      failures.push(`${page}: missing local asset: ${relative}`);
+const fail = (file, msg) => failures.push(`${file}: ${msg}`);
+
+async function walk(dir) {
+  const out = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...(await walk(full)));
+    else out.push(full);
+  }
+  return out;
+}
+const exists = (p) =>
+  access(p).then(
+    () => true,
+    () => false,
+  );
+
+const files = (await walk(dist)).filter((f) => f.endsWith(".html"));
+const pages = new Map(); // url path -> { file, html }
+for (const file of files) {
+  const html = await readFile(file, "utf8");
+  const rel = "/" + relative(dist, file).replace(/\\/g, "/");
+  const url = rel.endsWith("/index.html") ? rel.slice(0, -"index.html".length) : rel;
+  pages.set(url, { file: rel, html });
+}
+
+const titles = new Map();
+const descriptions = new Map();
+let checked = 0;
+
+for (const [url, { file, html }] of pages) {
+  const isRedirect = /http-equiv="refresh"/.test(html);
+  const is404 = url === "/404.html";
+
+  // Resolve local links and assets.
+  for (const m of html.matchAll(/(?:src|href|srcset)="([^"]+)"/g)) {
+    for (const candidate of m[1].split(",").map((s) => s.trim().split(" ")[0])) {
+      if (!candidate || /^(https?:|mailto:|tel:|data:)/.test(candidate)) continue;
+      if (candidate.startsWith("#")) {
+        const id = candidate.slice(1);
+        if (id && !new RegExp(`id="${id}"`).test(html)) fail(file, `broken fragment ${candidate}`);
+        continue;
+      }
+      const path = decodeURIComponent(candidate.split(/[?#]/)[0]);
+      const target = path.endsWith("/") ? join(dist, path, "index.html") : join(dist, path);
+      if (!(await exists(target))) fail(file, `missing local target ${candidate}`);
     }
   }
-  for (const match of html.matchAll(/href="#([^"]+)"/g)) {
-    if (!ids.includes(match[1]))
-      failures.push(`${page}: broken internal link: #${match[1]}`);
-  }
-  for (const match of html.matchAll(/<a[^>]*target="_blank"[^>]*>/g)) {
-    if (!/rel="[^"]*noopener[^"]*"/.test(match[0]))
-      failures.push(`${page}: unsafe external link: ${match[0]}`);
-  }
-  const analyticsBootstraps = [...html.matchAll(/src="\/?analytics\.js\?v=1"/g)]
-    .length;
-  const googleTags = [
-    ...html.matchAll(/googletagmanager\.com\/gtag\/js\?id=G-3NH66XEY32/g),
-  ].length;
-  if (analyticsBootstraps !== 1)
-    failures.push(`${page}: expected exactly one local analytics bootstrap`);
-  if (googleTags !== 1)
-    failures.push(
-      `${page}: expected exactly one Google Analytics measurement tag`,
-    );
-  if (
-    !/<head>\s*<!-- Google tag \(gtag\.js\) -->\s*<script\s+src="\/?analytics\.js\?v=1"><\/script>\s*<script(?=[^>]*\basync\b)(?=[^>]*src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-3NH66XEY32")[^>]*><\/script>/.test(
-      html,
-    )
-  ) {
-    failures.push(`${page}: Google tag must appear immediately after <head>`);
-  }
-  if (!/styles\.css\?v=12/.test(html))
-    failures.push(`${page}: current consent styles are not loaded`);
-  if (page !== "privacidad.html") {
-    if (!/script\.js\?v=(?:3|4|5)/.test(html))
-      failures.push(`${page}: current interaction script is not loaded`);
-    if (!/id="menuButton"/.test(html))
-      failures.push(`${page}: menu button is not wired`);
-    if (
-      !/<nav(?=[^>]*class="[^"]*\bmobile-menu\b[^"]*")(?=[^>]*id="mobileMenu")(?=[^>]*\bhidden\b)[^>]*>/.test(
-        html,
-      )
-    ) {
-      failures.push(`${page}: mobile menu must start hidden`);
+  for (const m of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/g))
+    if (!/rel="[^"]*noopener/.test(m[0])) fail(file, "target=_blank without rel=noopener");
+  if (/href="#"/.test(html)) fail(file, 'placeholder href="#"');
+  if (/\sstyle="/.test(html)) fail(file, "inline style attribute (blocked by CSP)");
+  if (/\son[a-z]+="/i.test(html)) fail(file, "inline event handler (blocked by CSP)");
+  for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
+    const attrs = m[1];
+    if (!/src=/.test(attrs) && !/type="application\/ld\+json"/.test(attrs)) fail(file, "inline executable script (blocked by CSP)");
+    if (/type="application\/ld\+json"/.test(attrs)) {
+      try {
+        JSON.parse(m[2]);
+      } catch {
+        fail(file, "invalid JSON-LD");
+      }
     }
   }
-  if (page === "index.html") {
-    if (!/home-next\.css\?v=\d+/.test(html))
-      failures.push(`${page}: AI Era visual system stylesheet is not loaded`);
-    if (!/home-sections\.css\?v=\d+/.test(html))
-      failures.push(`${page}: complete Home stylesheet is not loaded`);
-    if (!/home-next\.js\?v=\d+/.test(html))
-      failures.push(`${page}: AI Era interaction script is not loaded`);
-  } else if (!/internal-next\.css\?v=\d+/.test(html)) {
-    failures.push(`${page}: current internal-page visual system is not loaded`);
+  // Retired assets must never come back (AI-generated imagery and excluded projects).
+  if (/(?:src|href|srcset)="[^"]*(?:Phishing|Escaner|Gestor\.|MediDocs|Hospitalario|corevo|codefinan)/i.test(html)) fail(file, "references a retired asset");
+
+  if (isRedirect) {
+    if (!/rel="canonical"/.test(html) || !/noindex/.test(html)) fail(file, "redirect stub must have canonical and noindex");
+    continue;
+  }
+  checked++;
+
+  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+  const dup = ids.filter((id, i) => ids.indexOf(id) !== i);
+  if (dup.length) fail(file, `duplicate ids: ${[...new Set(dup)].join(", ")}`);
+  if (/<img(?![^>]*\salt=)[^>]*>/.test(html)) fail(file, "image without alt");
+  if ((html.match(/<h1[\s>]/g) || []).length !== 1) fail(file, "must contain exactly one <h1>");
+  if (!/<html lang="(es|en)">/.test(html)) fail(file, "missing lang attribute");
+  if (!/<main id="main">/.test(html) || !/class="skip" href="#main"/.test(html)) fail(file, "missing skip link / main landmark");
+  if (!/http-equiv="Content-Security-Policy"/.test(html)) fail(file, "missing CSP meta");
+  if ((html.match(/src="\/assets\/analytics\.js/g) || []).length !== 1) fail(file, "analytics bootstrap must load exactly once");
+  if (!/<head>\s*<!-- Google tag \(gtag\.js\) -->\s*<script src="\/assets\/analytics\.js[^"]*"><\/script>\s*<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-3NH66XEY32"><\/script>/.test(html))
+    fail(file, "Google tag must follow <head> immediately");
+
+  const title = html.match(/<title>([^<]*)<\/title>/)?.[1];
+  const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1];
+  if (!title) fail(file, "missing <title>");
+  if (!description) fail(file, "missing meta description");
+  if (is404) continue;
+  if (title && title.length > 75) fail(file, `title too long (${title.length})`);
+  if (description && (description.length < 50 || description.length > 200)) fail(file, `description length ${description.length}`);
+  if (titles.has(title)) fail(file, `duplicate title with ${titles.get(title)}`);
+  titles.set(title, file);
+  if (descriptions.has(description)) fail(file, `duplicate description with ${descriptions.get(description)}`);
+  descriptions.set(description, file);
+
+  const canonical = html.match(/<link rel="canonical" href="([^"]+)">/)?.[1];
+  if (canonical !== ORIGIN + url) fail(file, `canonical ${canonical} does not match ${ORIGIN + url}`);
+  if (!/property="og:image" content="https:\/\/codegurex\.com\/assets\/og-(es|en)\.png"/.test(html)) fail(file, "missing og:image");
+
+  // hreflang must be reciprocal.
+  const alt = Object.fromEntries([...html.matchAll(/hreflang="(es|en|x-default)" href="([^"]+)"/g)].map((m) => [m[1], m[2]]));
+  if (!alt.es || !alt.en || !alt["x-default"]) fail(file, "incomplete hreflang set");
+  for (const lang of ["es", "en"]) {
+    const other = pages.get(alt[lang]?.replace(ORIGIN, ""));
+    if (!other) fail(file, `hreflang ${lang} points to a missing page`);
+    else if (!other.html.includes(`hreflang="es" href="${alt.es}"`) || !other.html.includes(`hreflang="en" href="${alt.en}"`))
+      fail(file, `hreflang ${lang} is not reciprocal`);
   }
 }
+
+const sitemap = await readFile(join(dist, "sitemap.xml"), "utf8");
+for (const m of sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)) {
+  if (!pages.has(m[1].replace(ORIGIN, ""))) fail("sitemap.xml", `lists missing page ${m[1]}`);
+}
+
 if (failures.length) {
   console.error(failures.join("\n"));
   process.exit(1);
 }
-console.log(
-  `Validation passed: ${pages.length} pages, ${checkedIds} unique IDs and local references resolved.`,
-);
+console.log(`Validation passed: ${checked} pages, ${pages.size - checked} redirects/aux, links, hreflang, metadata and CSP rules OK.`);

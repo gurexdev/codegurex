@@ -1,10 +1,16 @@
 {
   "name": "codegurex-website",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
+  "description": "CodeGurex corporate website — bilingual static site generated with zero runtime dependencies.",
   "scripts": {
     "build": "node build.mjs",
-    "lint": "node validate.mjs"
+    "lint": "node build.mjs && node validate.mjs",
+    "qa": "node build.mjs && node scripts/qa.mjs",
+    "og": "node scripts/og.mjs"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
