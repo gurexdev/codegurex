@@ -1,3 +1,4 @@
+import { pageMeta, pageH1 } from "../content/seo-helpers.mjs";
 import {
   t,
   tx,
@@ -125,7 +126,7 @@ export function technology(lang) {
     ${crumbs(lang, trail)}
     <div class="page-hero-grid">
       <div>
-        <h1>${tr("Tecnología que usamos en proyectos reales.", "Technology we use on real projects.")}</h1>
+        <h1>${esc(pageH1("technology", lang))}</h1>
         <p class="lead">${tr(
           "Sin muros de logotipos. Cada tecnología aparece aquí porque la usamos en un proyecto verificable, y explicamos para qué.",
           "No wall of logos. Each technology is listed because we use it on a verifiable project, and we explain what for.",
@@ -146,11 +147,7 @@ ${ctaBand(lang)}`;
     lang,
     paths: ROUTES.technology,
     current: "technology",
-    title: tr("Tecnología y stack de ingeniería | CodeGurex", "Technology and engineering stack | CodeGurex"),
-    description: tr(
-      "TypeScript, Next.js, React, PostgreSQL, Supabase con RLS, Cloudflare, Vercel, pruebas automatizadas y herramientas de seguridad: cómo y para qué las usa CodeGurex.",
-      "TypeScript, Next.js, React, PostgreSQL, Supabase with RLS, Cloudflare, Vercel, automated testing and security tooling: how and why CodeGurex uses them.",
-    ),
+    ...pageMeta("technology", lang),
     body,
     schema: [breadcrumbSchema(lang, trail)],
   });
@@ -207,7 +204,7 @@ export function products(lang) {
     ${crumbs(lang, trail)}
     <div class="page-hero-grid">
       <div>
-        <h1>${tr("Productos e innovación.", "Products & innovation.")}</h1>
+        <h1>${esc(pageH1("products", lang))}</h1>
         <p class="lead">${tr(
           "Construimos productos propios para resolver problemas que conocemos de cerca. También es la forma más honesta de demostrar lo que sabemos hacer.",
           "We build our own products to solve problems we know first-hand. It is also the most honest way to show what we can do.",
@@ -226,11 +223,7 @@ ${ctaBand(lang)}`;
     lang,
     paths: ROUTES.products,
     current: "products",
-    title: tr("Productos e innovación | CodeGurex", "Products & innovation | CodeGurex"),
-    description: tr(
-      "Productos propios de CodeGurex: Sentinel (seguridad), BARBUS y CostFlow (SaaS) y herramientas internas, cada uno con su estado real.",
-      "CodeGurex's own products: Sentinel (security), BARBUS and CostFlow (SaaS) and internal tools, each with its real status.",
-    ),
+    ...pageMeta("products", lang),
     body,
     schema: [breadcrumbSchema(lang, trail)],
   });
@@ -256,7 +249,7 @@ export function sentinel(lang) {
     <div class="page-hero-grid">
       <div>
         <p class="mono muted">Security for the AI Era</p>
-        <h1>CodeGurex Sentinel</h1>
+        <h1>${esc(pageH1("sentinel", lang))}</h1>
         <p class="lead">${tr(
           "Una línea de producto para observar, entender y priorizar la exposición de aplicaciones, APIs, identidades, agentes de IA e infraestructura.",
           "A product line to observe, understand and prioritize exposure across applications, APIs, identities, AI agents and infrastructure.",
@@ -330,11 +323,7 @@ ${ctaBand(lang)}`;
     lang,
     paths: ROUTES.sentinel,
     current: "products",
-    title: tr("CodeGurex Sentinel — Seguridad para la era de la IA", "CodeGurex Sentinel — Security for the AI Era"),
-    description: tr(
-      "CodeGurex Sentinel: línea de producto de seguridad. Disponible: análisis de logs de autenticación. En desarrollo: exposición web. Planificado: APIs, IA y nube.",
-      "CodeGurex Sentinel: a security product line. Available: authentication-log analysis. In development: web exposure. Planned: APIs, AI and cloud.",
-    ),
+    ...pageMeta("sentinel", lang),
     body,
     schema: [breadcrumbSchema(lang, trail)],
   });
@@ -359,7 +348,7 @@ export function about(lang) {
     ${crumbs(lang, trail)}
     <div class="page-hero-grid">
       <div>
-        <h1>${tr("Una empresa de ingeniería independiente.", "An independent engineering company.")}</h1>
+        <h1>${esc(pageH1("about", lang))}</h1>
         <p class="lead">${tr(
           "CodeGurex diseña, construye y protege software. Nació en Manta, Ecuador, y trabaja con organizaciones de cualquier lugar que necesitan tecnología bien hecha y segura.",
           "CodeGurex designs, builds and secures software. It was born in Manta, Ecuador, and works with organizations anywhere that need technology done well and done securely.",
@@ -439,11 +428,7 @@ ${ctaBand(lang)}`;
     lang,
     paths: ROUTES.about,
     current: "about",
-    title: tr("Sobre CodeGurex — Empresa de ingeniería y seguridad", "About CodeGurex — Engineering and security company"),
-    description: tr(
-      "CodeGurex es una empresa independiente de ingeniería de software y ciberseguridad fundada en Ecuador, con atención internacional.",
-      "CodeGurex is an independent software engineering and cybersecurity company founded in Ecuador, working internationally.",
-    ),
+    ...pageMeta("about", lang),
     body,
     schema: [
       breadcrumbSchema(lang, trail),

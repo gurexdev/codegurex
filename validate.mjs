@@ -97,8 +97,15 @@ for (const [url, { file, html }] of pages) {
   if (!title) fail(file, "missing <title>");
   if (!description) fail(file, "missing meta description");
   if (is404) continue;
-  if (title && title.length > 75) fail(file, `title too long (${title.length})`);
-  if (description && (description.length < 50 || description.length > 200)) fail(file, `description length ${description.length}`);
+  const plainTitle = title?.replace(/&amp;/g, "&");
+  if (plainTitle && (plainTitle.length < 30 || plainTitle.length > 60)) fail(file, `title length ${plainTitle.length} outside 30–60`);
+  const plainDesc = description?.replace(/&amp;/g, "&");
+  if (plainDesc && (plainDesc.length < 110 || plainDesc.length > 165)) fail(file, `description length ${plainDesc.length} outside 110–165`);
+  // Generic anchor text tells search engines nothing about the target page.
+  for (const m of html.matchAll(/<a\b[^>]*>([^<]{1,40})<\/a>/g)) {
+    if (/^\s*(leer el caso|read the case study|ver servicio|view service|ver más|read more|aquí|click here|todo el trabajo|all work|ver productos|view products)\s*$/i.test(m[1]))
+      fail(file, `generic anchor text "${m[1].trim()}"`);
+  }
   if (titles.has(title)) fail(file, `duplicate title with ${titles.get(title)}`);
   titles.set(title, file);
   if (descriptions.has(description)) fail(file, `duplicate description with ${descriptions.get(description)}`);

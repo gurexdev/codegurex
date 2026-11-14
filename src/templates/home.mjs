@@ -1,3 +1,4 @@
+import { pageMeta, pageH1 } from "../content/seo-helpers.mjs";
 import {
   t,
   tx,
@@ -59,7 +60,7 @@ export function home(lang) {
       .slice(0, 4)
       .map(([name]) => `<li>${esc(tx(name, lang))}</li>`)
       .join("")}</ul>
-    <a class="arrow-link" href="${workPath(w, lang)}">${t(UI.readCase, lang)}</a>
+    <a class="arrow-link" href="${workPath(w, lang)}">${tr("Caso completo:", "Full case study:")} ${esc(tx(w.name, lang))}</a>
   </div>
 </article>`;
     })
@@ -83,8 +84,8 @@ export function home(lang) {
   <div class="wrap hero-grid">
     <div>
       <p class="hero-kicker mono"><span>CODEGUREX</span><span>${tr("Tecnología · Software · Seguridad", "Technology · Software · Security")}</span></p>
-      <h1 id="hero-title"><span>Technology.</span><span>Software.</span><span class="accent">Security.</span></h1>
-      <p class="hero-statement">${tr("Ingeniería de soluciones digitales para un mundo conectado.", "Engineering digital solutions for a connected world.")}</p>
+      <p class="hero-display"><span>Technology.</span><span>Software.</span><span class="accent">Security.</span></p>
+      <h1 id="hero-title" class="hero-statement">${esc(pageH1("home", lang))}</h1>
       <p class="lead">${tr(
         "Diseñamos, desarrollamos y protegemos productos digitales, sistemas de negocio y aplicaciones inteligentes.",
         "We design, develop and secure digital products, business systems and intelligent applications.",
@@ -114,7 +115,7 @@ export function home(lang) {
         "Desarrollamos productos propios —CodeGurex Sentinel, BARBUS, CostFlow— y herramientas internas. Cada uno muestra su estado real.",
         "We build our own products — CodeGurex Sentinel, BARBUS, CostFlow — and internal tools. Each shows its real status.",
       )}</p>
-      <a class="arrow-link" href="${route("products", lang)}">${tr("Ver productos", "View products")}</a>
+      <a class="arrow-link" href="${route("products", lang)}">${tr("Productos de CodeGurex", "CodeGurex products")}</a>
     </div>
   </div>
 </section>
@@ -130,7 +131,7 @@ export function home(lang) {
       )}</p>
     </div>
     <div class="plates">${plates}</div>
-    <p class="actions more"><a class="btn btn-line" href="${route("work", lang)}">${t(UI.allWork, lang)}</a></p>
+    <p class="actions more"><a class="btn btn-line" href="${route("work", lang)}">${tr("Ver el portafolio completo", "See the full portfolio")}</a></p>
   </div>
 </section>
 
@@ -187,24 +188,23 @@ export function home(lang) {
 </section>
 ${ctaBand(lang)}`;
 
-  const description = tr(
-    "CodeGurex diseña, desarrolla y protege productos digitales: sitios web, aplicaciones, plataformas SaaS, integraciones con IA y evaluaciones de ciberseguridad.",
-    "CodeGurex designs, develops and secures digital products: websites, applications, SaaS platforms, AI integrations and cybersecurity assessments.",
-  );
+  const description = pageMeta("home", lang).description;
 
   const schema = [
     {
-      "@type": "Organization",
+      "@type": "ProfessionalService",
       "@id": `${SITE.origin}/#organization`,
       name: "CodeGurex",
       url: `${SITE.origin}/`,
       logo: `${SITE.origin}/favicon-512.png`,
+      image: `${SITE.origin}/assets/og-${lang}.png`,
       email: SITE.email,
       telephone: SITE.phone,
       slogan: "Technology. Software. Security.",
       description,
-      foundingLocation: { "@type": "Country", name: "Ecuador" },
-      areaServed: "Worldwide",
+      address: { "@type": "PostalAddress", addressLocality: "Manta", addressRegion: "Manabí", addressCountry: "EC" },
+      areaServed: [{ "@type": "Country", name: "Ecuador" }, { "@type": "Place", name: "Worldwide" }],
+      foundingLocation: { "@type": "Place", name: "Manta, Ecuador" },
       founder: { "@type": "Person", name: "Jose Alejandro Gutierrez Guerrero", jobTitle: "CEO & Founder" },
       sameAs: [SITE.linkedin, SITE.github],
       contactPoint: {
@@ -214,7 +214,15 @@ ${ctaBand(lang)}`;
         telephone: SITE.phone,
         availableLanguage: ["es", "en"],
       },
-      knowsAbout: ["Software engineering", "Web application development", "SaaS development", "Application security", "API security", "AI security", "AI integration"],
+      knowsAbout: ["Desarrollo de software", "Diseño de páginas web", "Desarrollo SaaS", "Pentesting", "Seguridad de APIs", "Seguridad de IA", "Integración de IA"],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: tr("Servicios de CodeGurex", "CodeGurex services"),
+        itemListElement: SERVICES.map((s) => ({
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name: tx(s.name, lang), url: `${SITE.origin}${servicePath(s, lang)}` },
+        })),
+      },
     },
     {
       "@type": "WebSite",
@@ -230,8 +238,7 @@ ${ctaBand(lang)}`;
     lang,
     paths: ROUTES.home,
     current: "home",
-    title: tr("CodeGurex — Tecnología, software y seguridad", "CodeGurex — Technology, Software & Security"),
-    description,
+    ...pageMeta("home", lang),
     body,
     schema,
   });
