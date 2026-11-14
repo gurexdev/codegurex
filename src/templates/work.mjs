@@ -1,3 +1,5 @@
+import { pageMeta, pageH1 } from "../content/seo-helpers.mjs";
+import { WORK_SEO } from "../content/seo.mjs";
 import {
   t,
   tx,
@@ -63,7 +65,7 @@ export function workIndex(lang) {
     ${crumbs(lang, trail)}
     <div class="page-hero-grid">
       <div>
-        <h1>${tr("Trabajo verificable, con su estado real.", "Verifiable work, with its real status.")}</h1>
+        <h1>${esc(pageH1("work", lang))}</h1>
         <p class="lead">${tr(
           "Productos en producción, sistemas para clientes, plataformas en desarrollo e investigación propia. Cada caso indica qué evidencia lo respalda.",
           "Products in production, client systems, platforms in development and in-house research. Every case states the evidence behind it.",
@@ -107,11 +109,7 @@ ${ctaBand(lang)}`;
     lang,
     paths: ROUTES.work,
     current: "work",
-    title: tr("Trabajo y casos de estudio | CodeGurex", "Work and case studies | CodeGurex"),
-    description: tr(
-      "Casos de estudio de CodeGurex: plataformas SaaS, sistemas de gestión, CRM, sitios para salud y herramientas de ciberseguridad, con estado y evidencia.",
-      "CodeGurex case studies: SaaS platforms, business systems, CRM, healthcare websites and cybersecurity tools, with status and evidence.",
-    ),
+    ...pageMeta("work", lang),
     body,
     schema: [breadcrumbSchema(lang, trail)],
   });
@@ -151,7 +149,7 @@ export function caseStudy(w, lang) {
     <p class="plate-meta mono"><span>${t(w.sector, lang)}</span>${statusTag(w.status, lang)}</p>
     <div class="page-hero-grid">
       <div>
-        <h1>${name}</h1>
+        <h1>${t(WORK_SEO[w.id].h1, lang)}</h1>
         <p class="lead">${t(w.summary, lang)}</p>
         ${linkRow}
       </div>
@@ -197,7 +195,7 @@ ${ctaBand(lang)}`;
     lang,
     paths,
     current: "work",
-    title: `${tx(w.name, lang)} — ${tr("Caso de estudio", "Case study")} | CodeGurex`,
+    title: tx(WORK_SEO[w.id].title, lang),
     description: tx(w.summary, lang),
     body,
     schema: [

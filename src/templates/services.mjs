@@ -1,3 +1,5 @@
+import { pageMeta, pageH1 } from "../content/seo-helpers.mjs";
+import { SERVICE_SEO, WHERE } from "../content/seo.mjs";
 import {
   t,
   tx,
@@ -105,7 +107,7 @@ export function solutions(lang) {
     ${crumbs(lang, trail)}
     <div class="page-hero-grid">
       <div>
-        <h1>${tr("Soluciones organizadas por lo que tu negocio necesita.", "Solutions organized around what your business needs.")}</h1>
+        <h1>${esc(pageH1("solutions", lang))}</h1>
         <p class="lead">${tr(
           "No empezamos por la tecnología. Empezamos por el problema: presencia, operación, producto, inteligencia o riesgo.",
           "We do not start with technology. We start with the problem: presence, operations, product, intelligence or risk.",
@@ -129,11 +131,7 @@ ${ctaBand(lang)}`;
     lang,
     paths: ROUTES.solutions,
     current: "solutions",
-    title: tr("Soluciones de software y ciberseguridad | CodeGurex", "Software and cybersecurity solutions | CodeGurex"),
-    description: tr(
-      "Presencia digital, plataformas, tecnología de negocio, sistemas inteligentes y seguridad: soluciones de CodeGurex organizadas por necesidad.",
-      "Digital presence, platforms, business technology, intelligent systems and security: CodeGurex solutions organized by business need.",
-    ),
+    ...pageMeta("solutions", lang),
     body,
     schema: [breadcrumbSchema(lang, trail)],
   });
@@ -170,7 +168,7 @@ export function servicesIndex(lang) {
     ${crumbs(lang, trail)}
     <div class="page-hero-grid">
       <div>
-        <h1>${tr("Servicios de ingeniería y de seguridad.", "Engineering and security services.")}</h1>
+        <h1>${esc(pageH1("services", lang))}</h1>
         <p class="lead">${tr(
           "Separamos con claridad lo que construimos de lo que evaluamos. Cada servicio explica el problema, el alcance, el proceso y los entregables.",
           "We clearly separate what we build from what we assess. Each service explains the problem, scope, process and deliverables.",
@@ -191,11 +189,7 @@ ${ctaBand(lang)}`;
     lang,
     paths: ROUTES.services,
     current: "services",
-    title: tr("Servicios: desarrollo de software, IA y ciberseguridad | CodeGurex", "Services: software development, AI and cybersecurity | CodeGurex"),
-    description: tr(
-      "Desarrollo web, aplicaciones a medida, SaaS, sistemas de gestión, APIs, IA y evaluaciones de seguridad de aplicaciones, APIs, IA y nube.",
-      "Web development, custom applications, SaaS, business systems, APIs, AI and security assessments for applications, APIs, AI and cloud.",
-    ),
+    ...pageMeta("services", lang),
     body,
     schema: [breadcrumbSchema(lang, trail)],
   });
@@ -203,6 +197,7 @@ ${ctaBand(lang)}`;
 
 export function serviceDetail(service, lang) {
   const tr = (es, en) => (lang === "es" ? es : en);
+  const seo = SERVICE_SEO[service.id];
   const track = TRACKS[service.track];
   const paths = { es: servicePath(service, "es"), en: servicePath(service, "en") };
   const trail = [
@@ -223,7 +218,7 @@ export function serviceDetail(service, lang) {
     <div class="page-hero-grid">
       <div>
         <p class="mono muted">${track.code} · ${t(track.title, lang)}</p>
-        <h1>${t(service.name, lang)}</h1>
+        <h1>${t(seo.h1, lang)}</h1>
         <p class="lead">${t(service.short, lang)}</p>
         <div class="actions"><a class="btn btn-blue" href="${ctaHref}">${ctaLabel}</a></div>
       </div>
@@ -259,6 +254,10 @@ export function serviceDetail(service, lang) {
       </div>
     </div>
     <div class="split">
+      <h2>${tr("Por qué con CodeGurex", "Why CodeGurex")}</h2>
+      <div class="body"><p>${t(seo.why, lang)}</p></div>
+    </div>
+    <div class="split">
       <h2>${tr("Capacidades técnicas", "Technical capabilities")}</h2>
       <div class="body"><ul class="tags">${service.capabilities.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>
       <a class="arrow-link" href="${route("technology", lang)}">${tr("Cómo usamos estas tecnologías", "How we use these technologies")}</a></div>
@@ -292,6 +291,19 @@ ${
 </div></section>`
     : ""
 }
+<section class="section on-white rule-top" aria-labelledby="faq-title">
+  <div class="wrap">
+    ${sheetLabel("?", L("Preguntas frecuentes", "Frequently asked questions"), lang)}
+    <div class="split">
+      <h2 id="faq-title">${tr("Preguntas frecuentes sobre", "Questions about")} ${t(service.name, lang).toLowerCase()}</h2>
+      <div class="body faq">${seo.faq.map(([q, a]) => `<h3>${t(q, lang)}</h3><p>${t(a, lang)}</p>`).join("")}</div>
+    </div>
+    <div class="split">
+      <h2>${tr("Dónde trabajamos", "Where we work")}</h2>
+      <div class="body"><p>${t(WHERE, lang)}</p></div>
+    </div>
+  </div>
+</section>
 <section class="section rule-top" aria-labelledby="related-title">
   <div class="wrap">
     ${sheetLabel(track.code, L("Servicios relacionados", "Related services"), lang)}
@@ -310,8 +322,8 @@ ${ctaBand(lang)}`;
       name: tx(service.name, lang),
       description: tx(service.short, lang),
       serviceType: tx(track.title, lang),
-      provider: { "@type": "Organization", name: "CodeGurex", url: `${SITE.origin}/` },
-      areaServed: "Worldwide",
+      provider: { "@id": `${SITE.origin}/#organization` },
+      areaServed: [{ "@type": "Country", name: "Ecuador" }, "Worldwide"],
       url: `${SITE.origin}${paths[lang]}`,
     },
   ];
@@ -320,8 +332,8 @@ ${ctaBand(lang)}`;
     lang,
     paths,
     current: "services",
-    title: tx(service.seo, lang),
-    description: `${tx(service.short, lang)} ${tx(service.problem, lang)}`.slice(0, 158).replace(/\s+\S*$/, "…"),
+    title: tx(seo.title, lang),
+    description: tx(seo.description, lang),
     body,
     schema,
   });

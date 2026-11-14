@@ -654,7 +654,8 @@ ol {
 .hero-kicker span:first-child {
   color: var(--ink);
 }
-.hero h1 {
+.hero .hero-display {
+  margin: 0;
   font-size: var(--t-display);
   font-weight: 700;
   font-stretch: 120%;
@@ -662,20 +663,20 @@ ol {
   line-height: 0.94;
   margin-bottom: 1.75rem;
 }
-.hero h1 span {
+.hero .hero-display span {
   display: block;
 }
-.hero h1 .accent {
+.hero .hero-display .accent {
   color: var(--blue);
 }
 .hero-statement {
+  margin: 0 0 1rem;
   font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
   font-weight: 600;
   font-stretch: 108%;
   letter-spacing: -0.015em;
   line-height: 1.25;
-  max-width: 26ch;
-  margin-bottom: 1rem;
+  max-width: 30ch;
 }
 .hero .lead {
   margin-bottom: 2rem;
@@ -2086,4 +2087,18 @@ fieldset.field {
 .on-ink .index-row h3,
 .on-ink .process h3 {
   color: #fff;
+}
+/* FAQ blocks on service pages */
+.faq h3 {
+  font-size: 1.12rem;
+  font-weight: 650;
+  font-stretch: 108%;
+  margin: 1.75rem 0 0.4rem;
+}
+.faq h3:first-child {
+  margin-top: 0;
+}
+.faq p {
+  color: var(--muted);
+  margin: 0;
 }

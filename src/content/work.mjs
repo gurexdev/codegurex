@@ -314,7 +314,7 @@ export const WORK = [
     featured: false,
     summary: L(
       "Seis modos de estudio —quiz, flashcards, examen, contrarreloj, ranking y administración— para aprender psicopatología.",
-      "Six study modes — quiz, flashcards, exam, time attack, leaderboard and admin — for learning psychopathology.",
+      "Six study modes — quiz, flashcards, exam, time attack, leaderboard and admin — for psychology students learning psychopathology.",
     ),
     context: L(
       "Estudiantes de psicopatología necesitaban repasar semiología psiquiátrica de forma activa, no solo leyendo apuntes.",
@@ -411,7 +411,7 @@ export const WORK = [
     featured: false,
     summary: L(
       "Tres herramientas de código abierto: gestor de contraseñas cifrado, detector de phishing y escáner de puertos.",
-      "Three open-source tools: an encrypted password manager, a phishing detector and a port scanner.",
+      "Three open-source Python tools: an encrypted password manager, a phishing detector and a port scanner, with documented limits.",
     ),
     context: L(
       "Entender cómo funcionan los controles por dentro es parte de evaluarlos bien. Estas herramientas se construyen para aprender y enseñar, con avisos de uso responsable.",

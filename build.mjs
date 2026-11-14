@@ -86,6 +86,35 @@ ${urls}
 </urlset>
 `,
 );
+// llms.txt: a plain summary for AI search engines and assistants (GEO).
+{
+  const svc = (lang) => SERVICES.map((s) => `- [${s.name[lang]}](${SITE.origin}${servicePath(s, lang)}): ${s.short[lang]}`).join("\n");
+  const cases = (lang) => WORK.map((w) => `- [${typeof w.name === "string" ? w.name : w.name[lang]}](${SITE.origin}${workPath(w, lang)}): ${w.summary[lang]}`).join("\n");
+  await write(
+    "llms.txt",
+    `# CodeGurex
+
+> CodeGurex is an independent software development and cybersecurity company founded in Manta, Ecuador. It designs, builds and secures websites, custom software, SaaS platforms, business systems and AI integrations, and performs authorized security assessments of web applications, APIs, AI systems and cloud infrastructure. Spanish and English. Contact: ${SITE.email}.
+
+Every project on the site states its real status (in production, in development, planned) and the evidence behind it. No invented clients, metrics or certifications.
+
+## Services (English)
+${svc("en")}
+
+## Servicios (español)
+${svc("es")}
+
+## Case studies
+${cases("en")}
+
+## Company
+- [About](${SITE.origin}${ROUTES.about.en})
+- [Products and CodeGurex Sentinel](${SITE.origin}${ROUTES.products.en})
+- [Technology](${SITE.origin}${ROUTES.technology.en})
+- [Contact](${SITE.origin}${ROUTES.contact.en})
+`,
+  );
+}
 await write("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${SITE.origin}/sitemap.xml\n`);
 
 // ---------- Manifest, headers, brand mark ----------

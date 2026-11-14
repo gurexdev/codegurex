@@ -1,3 +1,4 @@
+import { pageMeta, pageH1 } from "../content/seo-helpers.mjs";
 import {
   t,
   tx,
@@ -148,11 +149,7 @@ export function contact(lang) {
     lang,
     paths: ROUTES.contact,
     current: "contact",
-    title: tr("Contacto — Hablemos de tu proyecto | CodeGurex", "Contact — Discuss a project | CodeGurex"),
-    description: tr(
-      "Cuéntanos qué necesitas construir o proteger: desarrollo de software, SaaS, integraciones, IA o una evaluación de seguridad.",
-      "Tell us what you need to build or secure: software development, SaaS, integrations, AI or a security assessment.",
-    ),
+    ...pageMeta("contact", lang),
     body,
     schema: [breadcrumbSchema(lang, trail), { "@type": "ContactPage", url: `${SITE.origin}${ROUTES.contact[lang]}`, name: tr("Contacto", "Contact") }],
   });
@@ -241,8 +238,7 @@ export function privacy(lang) {
     lang,
     paths: ROUTES.privacy,
     current: "privacy",
-    title: tr("Política de privacidad | CodeGurex", "Privacy policy | CodeGurex"),
-    description: tr("Cómo trata CodeGurex los datos de contacto, la analítica y los registros técnicos de codegurex.com.", "How CodeGurex handles contact data, analytics and technical logs on codegurex.com."),
+    ...pageMeta("privacy", lang),
     body,
     schema: [breadcrumbSchema(lang, trail)],
   });
