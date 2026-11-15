@@ -226,7 +226,7 @@
     )}</h2><p>${T(
       "Usamos Google Analytics para saber qué páginas son útiles. Empieza desactivada y la publicidad personalizada nunca se activa.",
       "We use Google Analytics to learn which pages are useful. It starts disabled and personalised advertising is never enabled.",
-    )} <a href="${privacyHref}">${T("Más información", "Learn more")}</a></p><div class="actions"><button class="btn btn-small" type="button" data-choice="granted">${T(
+    )} <a href="${privacyHref}">${T("Política de privacidad", "Privacy policy")}</a></p><div class="actions"><button class="btn btn-small" type="button" data-choice="granted">${T(
       "Aceptar",
       "Accept",
     )}</button><button class="btn btn-small btn-line" type="button" data-choice="denied">${T("Rechazar", "Decline")}</button></div>`;

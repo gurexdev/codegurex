@@ -6,6 +6,7 @@ import {
   esc,
   route,
   workPath,
+  servicePath,
   statusTag,
   sheetLabel,
   crumbs,
@@ -18,6 +19,7 @@ import {
   SITE,
   UI,
   WORK,
+  SERVICES,
   ROUTES,
   external,
 } from "./base.mjs";
@@ -184,6 +186,19 @@ ${figures ? `<section class="section on-white"><div class="wrap">${figures}</div
     </div></div>
   </div>
 </section>
+${(() => {
+  const services = SERVICES.filter((s) => s.evidence.includes(w.id));
+  if (!services.length) return "";
+  return `<section class="section rule-top" aria-labelledby="case-services">
+  <div class="wrap">
+    ${sheetLabel("S", { es: "Servicios demostrados en este caso", en: "Services shown in this case" }, lang)}
+    <h2 id="case-services" class="sr-only">${tr("Servicios relacionados", "Related services")}</h2>
+    <ul class="index">${services
+      .map((s) => `<li><a class="index-row" href="${servicePath(s, lang)}"><span class="num">→</span><h3>${t(s.name, lang)}</h3><p>${t(s.short, lang)}</p><span class="go" aria-hidden="true">→</span></a></li>`)
+      .join("")}</ul>
+  </div>
+</section>`;
+})()}
 <section class="on-ink">
   <div class="wrap">
     <a class="next-case" href="${workPath(next, lang)}"><span class="mono">${tr("Siguiente caso", "Next case")} →</span><strong>${esc(tx(next.name, lang))}</strong><span class="muted">${t(next.kind, lang)}</span></a>

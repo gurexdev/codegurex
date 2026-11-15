@@ -30,6 +30,7 @@ export const ROUTES = {
   about: L("/nosotros/", "/en/about/"),
   contact: L("/contacto/", "/en/contact/"),
   privacy: L("/privacidad/", "/en/privacy/"),
+  blog: L("/blog/", "/en/blog/"),
 };
 
 export const NAV = [
@@ -39,6 +40,7 @@ export const NAV = [
   ["products", L("Productos", "Products")],
   ["technology", L("Tecnología", "Technology")],
   ["about", L("Empresa", "Company")],
+  ["blog", L("Blog", "Blog")],
 ];
 
 export const UI = {
@@ -76,7 +78,7 @@ export const UI = {
     "Todo lo publicado aquí corresponde a trabajo verificable. Los estados de cada proyecto y producto se indican de forma explícita.",
     "Everything published here is verifiable work. The status of every project and product is stated explicitly.",
   ),
-  location: L("Ecuador · Atención internacional", "Ecuador · Working internationally"),
+  location: L("Manta, Manabí, Ecuador · Atención en todo Ecuador y remota", "Manta, Manabí, Ecuador · Serving clients worldwide"),
   privacyPrefs: L("Preferencias de privacidad", "Privacy preferences"),
 };
 

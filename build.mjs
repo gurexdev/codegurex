@@ -1,6 +1,6 @@
 // Static site generator for codegurex.com — zero dependencies.
 // src/content (bilingual data) + src/templates → dist/
-import { cp, copyFile, mkdir, rm, writeFile } from "node:fs/promises";
+import { cp, copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -13,6 +13,8 @@ import { solutions, servicesIndex, serviceDetail } from "./src/templates/service
 import { workIndex, caseStudy } from "./src/templates/work.mjs";
 import { technology, products, sentinel, about } from "./src/templates/company.mjs";
 import { contact, privacy, notFound, redirectStub } from "./src/templates/contact.mjs";
+import { blogIndex, article, articlePath, localLanding, localPath } from "./src/templates/blog.mjs";
+import { ARTICLES } from "./src/content/articles.mjs";
 
 const root = dirname(fileURLToPath(import.meta.url));
 const dist = join(root, "dist");
@@ -49,6 +51,11 @@ await add(ROUTES.technology, "0.6", technology);
 await add(ROUTES.about, "0.7", about);
 await add(ROUTES.contact, "0.8", contact);
 await add(ROUTES.privacy, "0.2", privacy);
+await add(ROUTES.blog, "0.7", blogIndex);
+for (const a of ARTICLES) {
+  await add({ es: articlePath(a, "es"), en: articlePath(a, "en") }, "0.7", (lang) => article(a, lang));
+}
+await add({ es: localPath("es"), en: localPath("en") }, "0.9", localLanding);
 await write("404.html", notFound());
 
 // ---------- Legacy URLs → new routes ----------
@@ -107,7 +114,11 @@ ${svc("es")}
 ## Case studies
 ${cases("en")}
 
+## Articles
+${ARTICLES.map((a) => `- [${a.h1.en}](${SITE.origin}${articlePath(a, "en")}): ${a.description.en}`).join("\n")}
+
 ## Company
+- [Software development company in Ecuador](${SITE.origin}${localPath("en")})
 - [About](${SITE.origin}${ROUTES.about.en})
 - [Products and CodeGurex Sentinel](${SITE.origin}${ROUTES.products.en})
 - [Technology](${SITE.origin}${ROUTES.technology.en})
@@ -170,6 +181,18 @@ await write(
 
 // ---------- Static assets ----------
 await cp(join(root, "src/assets"), join(dist, "assets"), { recursive: true });
+// Minify CSS (comments and whitespace only; safe for this hand-written stylesheet).
+{
+  const cssPath = join(dist, "assets/site.css");
+  const css = await readFile(cssPath, "utf8");
+  const min = css
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\s+/g, " ")
+    .replace(/\s*([{}:;,>])\s*/g, "$1")
+    .replace(/;}/g, "}")
+    .trim();
+  await writeFile(cssPath, min);
+}
 for (const file of ["favicon.ico", "favicon-512.png", "CNAME", ".nojekyll"]) {
   await copyFile(join(root, file), join(dist, file));
 }
