@@ -28,7 +28,32 @@ Fecha: 2026-11-14. Método: skill *claude-seo* (AgriciDaniel), plantilla **agenc
 - **`/llms.txt`:** resumen del sitio para buscadores con IA (ChatGPT, Perplexity, Gemini). Se genera en cada build.
 - **`validate.mjs`** ahora bloquea el despliegue si un título o una descripción se sale de rango, o si aparece un ancla genérica.
 
+## 2b. Segunda pasada (agencia, 2026-11-15)
+
+Medido con Lighthouse móvil en producción antes de los cambios: **SEO 83–85**, rendimiento 98–99, accesibilidad 100. Con el código nuevo (build local): **SEO 100**, rendimiento 98–99, accesibilidad 100, en portada, servicio, artículo y página local.
+
+| Cambio | Motivo |
+|---|---|
+| **Blog** (`/blog/`) con 4 artículos de experto en ES y EN: cómo elegir una empresa de software en Ecuador, qué es un pentest web, Row Level Security en Supabase y checklist de seguridad web | Capturar búsquedas informativas y demostrar experiencia (E-E-A-T). Cada artículo tiene autor, fecha, `BlogPosting` y enlaces a servicios y casos |
+| **Página local** "Desarrollo de software y páginas web en Manta" (EN: *Software development company in Ecuador*) | Búsquedas locales con casi nula competencia. Es una sola página con trabajo real en Manta (sin páginas puerta por ciudad) |
+| Cada caso enlaza a los servicios que demuestra | Enlazado interno: reparte la autoridad hacia las páginas comerciales |
+| Pie de página con "Manta, Manabí, Ecuador" | Coherencia de nombre, dirección y teléfono (NAP) |
+| Correo sin ofuscar (`<!--email_off-->`) | Cloudflare reemplazaba el correo por "[email protected]" para los rastreadores |
+| Enlace de idioma con nombre accesible coherente y "Política de privacidad" en lugar de "Más información" | Fallos de Lighthouse (*label-content-name-mismatch*, *link-text*) |
+| 404 sin canonical ni hreflang; redirecciones sin `noindex` contradictorio | Señales limpias para Google |
+| CSS minificado y versión de assets renovada (`?v=2`) | Rendimiento y caché |
+| `llms.txt` incluye artículos y la página local | GEO |
+
 ## 3. Lo que tienes que hacer tú (en orden de impacto)
+
+### Urgente — Cloudflare está limitando tu visibilidad
+1. **robots.txt gestionado / AI Crawl Control** (Cloudflare → tu dominio → *AI Crawl Control* o *Security → Bots → Manage robots.txt*): hoy Cloudflare antepone reglas que **bloquean GPTBot, ClaudeBot, Google-Extended, GoogleOther, Applebot-Extended, Baiduspider y más de 25 bots**, y Lighthouse marca el archivo como inválido. Si quieres aparecer y ser citado por asistentes de IA, desactiva el robots.txt gestionado (o permite al menos los bots de búsqueda). Es una decisión de negocio: bloquearlos impide que entrenen con tu contenido, pero también reduce tu presencia en ChatGPT, Claude y Gemini.
+2. **JavaScript Detections / Bot Fight Mode** (*Security → Bots*): Cloudflare inyecta un script en línea que tu CSP bloquea (error en consola, −puntos en Lighthouse). Desactívalo o acepta el error.
+3. **Web Analytics automático** (*Analytics & Logs → Web Analytics*): Cloudflare inyecta su beacon y tu CSP lo bloquea. Ya usas Google Analytics: desactiva la inyección automática.
+4. **Caché de assets** (*Caching → Cache Rules*): regla para `/assets/*` con *Edge/Browser TTL* de 1 año. Los archivos llevan versión (`?v=`), así que es seguro.
+5. **Verifica** que `http://codegurex.com` y `https://www.codegurex.com` redirigen con 301 a `https://codegurex.com/` (no se pudo comprobar desde el entorno de auditoría).
+
+### Sin cambios respecto a la primera pasada
 
 ### Semana 1 — que Google sepa que existes
 1. **Google Search Console** (search.google.com/search-console): agrega `codegurex.com` como propiedad de dominio (verificación por DNS en Cloudflare). Envía `https://codegurex.com/sitemap.xml`. Usa *Inspección de URL → Solicitar indexación* para la portada y los 5 servicios principales.

@@ -2,7 +2,7 @@ import { SITE, ROUTES, NAV, UI, STATUS, STATUS_TONE, LOCALE } from "../content/s
 import { SERVICES, TRACKS } from "../content/services.mjs";
 import { WORK } from "../content/work.mjs";
 
-export const ASSET_VERSION = "1";
+export const ASSET_VERSION = "2";
 
 /* ---------- Helpers ---------- */
 export const esc = (value) =>
@@ -89,7 +89,7 @@ function header(lang, current, alternate) {
     ${brand(lang)}
     <nav class="primary-nav" aria-label="${t(UI.mainNav, lang)}"><ul>${links}</ul></nav>
     <div class="header-actions">
-      <a class="lang-link" href="${alternate}" hreflang="${other(lang)}" lang="${other(lang)}" aria-label="${t(UI.langLabel, lang)}">${t(UI.langShort, lang)}</a>
+      <a class="lang-link" href="${alternate}" hreflang="${other(lang)}" lang="${other(lang)}" aria-label="${t(UI.langShort, lang)} · ${t(UI.langLabel, lang)}">${t(UI.langShort, lang)}</a>
       <a class="btn btn-small header-cta" href="${route("contact", lang)}">${t(UI.discuss, lang)}</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" data-open-label="${t(UI.menuOpen, lang)}" data-close-label="${t(UI.menuClose, lang)}" aria-label="${t(UI.menuOpen, lang)}"><i></i>${t(UI.menu, lang)}</button>
     </div>
@@ -121,10 +121,13 @@ function footer(lang) {
         <div><h2>${t(UI.footerBuild, lang)}</h2>${list(byTrack(["build", "integrate"]))}</div>
         <div><h2>${t(UI.footerSecure, lang)}</h2>${list([...byTrack("secure"), [route("sentinel", lang), "CodeGurex Sentinel"]])}</div>
         <div><h2>${t(UI.footerCompany, lang)}</h2>${list(
-          [["solutions"], ["work"], ["products"], ["technology"], ["about"]].map(([k]) => [
-            route(k, lang),
-            t(NAV.find(([key]) => key === k)[1], lang),
-          ]),
+          [
+            ...[["solutions"], ["work"], ["products"], ["technology"], ["about"], ["blog"]].map(([k]) => [
+              route(k, lang),
+              t(NAV.find(([key]) => key === k)[1], lang),
+            ]),
+            [lang === "es" ? "/desarrollo-de-software-manta/" : "/en/software-development-ecuador/", lang === "es" ? "Desarrollo de software en Manta" : "Software development in Ecuador"],
+          ],
         )}</div>
         <div><h2>${t(UI.footerContact, lang)}</h2><ul>
           <li><a href="${route("contact", lang)}">${t(UI.discuss, lang)}</a></li>
@@ -151,7 +154,7 @@ export const CSP =
  * Render a full HTML page.
  * paths: { es, en } — this page's path in both languages (null for single-language pages).
  */
-export function page({ lang, paths, current, title, description, body, schema = [], robots = "index, follow", ogImage }) {
+export function page({ lang, paths, current, title, description, body, schema = [], robots = "index, follow", ogImage, ogType = "website", canonical = true }) {
   const self = paths[lang];
   const alternate = paths[other(lang)];
   const image = ogImage || `${SITE.origin}/assets/og-${lang}.png`;
@@ -173,16 +176,16 @@ export function page({ lang, paths, current, title, description, body, schema = 
 <meta name="robots" content="${robots}">
 <meta name="author" content="CodeGurex">
 <meta name="theme-color" content="#0a1120">
-<link rel="canonical" href="${absolute(self)}">
+${canonical ? `<link rel="canonical" href="${absolute(self)}">
 <link rel="alternate" hreflang="es" href="${absolute(paths.es)}">
 <link rel="alternate" hreflang="en" href="${absolute(paths.en)}">
-<link rel="alternate" hreflang="x-default" href="${absolute(paths.en)}">
+<link rel="alternate" hreflang="x-default" href="${absolute(paths.en)}">` : ""}
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/favicon-512.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
-<meta property="og:type" content="website">
+<meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="CodeGurex">
 <meta property="og:locale" content="${LOCALE[lang]}">
 <meta property="og:locale:alternate" content="${LOCALE[other(lang)]}">
@@ -201,12 +204,14 @@ export function page({ lang, paths, current, title, description, body, schema = 
 ${graph}
 </head>
 <body>
+<!--email_off-->
 <a class="skip" href="#main">${t(UI.skip, lang)}</a>
 ${header(lang, current, alternate)}
 <main id="main">
 ${body}
 </main>
 ${footer(lang)}
+<!--/email_off-->
 </body>
 </html>
 `;

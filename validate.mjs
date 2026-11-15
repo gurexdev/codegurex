@@ -75,7 +75,7 @@ for (const [url, { file, html }] of pages) {
   if (/(?:src|href|srcset)="[^"]*(?:Phishing|Escaner|Gestor\.|MediDocs|Hospitalario|corevo|codefinan)/i.test(html)) fail(file, "references a retired asset");
 
   if (isRedirect) {
-    if (!/rel="canonical"/.test(html) || !/noindex/.test(html)) fail(file, "redirect stub must have canonical and noindex");
+    if (!/rel="canonical"/.test(html)) fail(file, "redirect stub must have a canonical to its target");
     continue;
   }
   checked++;
