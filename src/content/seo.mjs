@@ -288,6 +288,10 @@ export const WORK_SEO = {
     title: L("CRM de ventas a medida para un fabricante | CodeGurex", "Custom sales CRM for a manufacturer | CodeGurex"),
     h1: L("CRM de ventas a medida para un fabricante ecuatoriano", "Custom sales CRM for an Ecuadorian manufacturer"),
   },
+  brisel: {
+    title: L("BRISEL: catálogo mayorista con pedido por WhatsApp", "BRISEL: wholesale catalog with WhatsApp orders"),
+    h1: L("BRISEL: catálogo web mayorista de ropa con pedido por WhatsApp", "BRISEL: wholesale clothing catalog with WhatsApp ordering"),
+  },
   costflow: {
     title: L("CostFlow: sistema de inventario y fiados | CodeGurex", "CostFlow: inventory & store-credit SaaS | CodeGurex"),
     h1: L("CostFlow: sistema de ventas, inventario y fiados para pequeños negocios", "CostFlow: sales, inventory and store-credit system for small businesses"),

@@ -70,7 +70,7 @@ export const SERVICES = [
       L("Informe técnico de rendimiento y SEO", "Technical performance and SEO report"),
     ],
     capabilities: ["HTML", "CSS", "JavaScript", "Next.js", "SEO", "GitHub Actions", "Vercel", "Cloudflare"],
-    evidence: ["codegurex-com", "adulam"],
+    evidence: ["codegurex-com", "adulam", "brisel"],
   },
   {
     id: "web-applications",
@@ -109,7 +109,7 @@ export const SERVICES = [
       L("Plan de mejora continua", "Continuous improvement plan"),
     ],
     capabilities: ["TypeScript", "React", "Next.js", "Supabase", "PostgreSQL", "PWA"],
-    evidence: ["crm", "psicoquiz", "adulam"],
+    evidence: ["crm", "brisel", "psicoquiz", "adulam"],
   },
   {
     id: "saas-development",
@@ -212,7 +212,7 @@ export const SERVICES = [
       L("Pruebas de contrato y de errores", "Contract and failure-mode tests"),
     ],
     capabilities: ["REST", "Route Handlers", "Server Actions", "Zod", "Supabase", "Webhooks"],
-    evidence: ["prez", "crm"],
+    evidence: ["prez", "crm", "brisel"],
   },
   {
     id: "ai-automation",
