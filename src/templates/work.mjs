@@ -47,7 +47,7 @@ export function workIndex(lang) {
     .join("");
 
   const items = WORK.map(
-    (w, i) => `<li class="work-item" data-disciplines="${w.disciplines.join(" ")}">
+    (w, i) => `<li class="work-item${w.spotlight ? " is-spotlight" : ""}" data-disciplines="${w.disciplines.join(" ")}">
   <a href="${workPath(w, lang)}">
     <div class="thumb">${thumb(w, lang)}</div>
     <div class="meta mono"><span>${String(i + 1).padStart(2, "0")} · ${esc(w.year)}</span>${statusTag(w.status, lang)}</div>
