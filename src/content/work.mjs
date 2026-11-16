@@ -68,12 +68,16 @@ export const WORK = [
       "Pendiente: pagos recurrentes (fase 3), Turnstile y rate limiting antes de abrir staging.",
       "Pending: recurring payments (phase 3), Turnstile and rate limiting before opening staging.",
     ),
-    basis: L("Código fuente revisado (repositorio privado)", "Source code reviewed (private repository)"),
+    basis: L("Código fuente revisado y ejecutado en local (repositorio privado)", "Source code reviewed and run locally (private repository)"),
     evidence: [
       [L("Repositorio privado", "Private repository"), L("10 módulos, 11 migraciones, 193 archivos TypeScript", "10 modules, 11 migrations, 193 TypeScript files")],
       [L("Documentación", "Documentation"), L("Arquitectura, seguridad, modelo de amenazas, pruebas, roadmap", "Architecture, security, threat model, testing, roadmap")],
     ],
-    images: [],
+    spotlight: true,
+    images: [
+      ["prez-home", L("Portada de PREZ con la vista previa de la app del atleta (versión en desarrollo, datos de ejemplo)", "PREZ homepage with the athlete app preview (in-development build, sample data)")],
+      ["prez-plan", L("Sección de membresía de PREZ: plan mensual y precio con código de gimnasio (versión en desarrollo)", "PREZ membership section: monthly plan and gym-code price (in-development build)")],
+    ],
   },
   {
     id: "barbus",
@@ -191,7 +195,8 @@ export const WORK = [
     status: "published",
     year: "2026",
     disciplines: ["web", "engineering"],
-    featured: false,
+    featured: true,
+    spotlight: true,
     summary: L(
       "Catálogo web mayorista de ropa femenina: precio por docena automático, pedido por color y talla, y el pedido completo enviado ordenado a WhatsApp.",
       "Wholesale women's clothing catalog: automatic dozen pricing, ordering by colour and size, and the full order sent neatly to WhatsApp.",
@@ -466,7 +471,7 @@ export const WORK = [
     basis: L("Repositorio público e historial de commits", "Public repository and commit history"),
     evidence: [[L("Código", "Code"), "github.com/gurexdev/codegurex"]],
     link: "https://github.com/gurexdev/codegurex",
-    images: [],
+    images: [["codegurex-home", L("Portada de codegurex.com con el dibujo técnico del sistema en tres capas", "codegurex.com homepage with the three-layer system drawing")]],
   },
   {
     id: "security-lab",
@@ -528,6 +533,11 @@ export const WORK = [
     images: [],
   },
 ];
+
+// Display order: strongest client-facing work first (visual impact and business value),
+// in-house experiments last.
+export const WORK_ORDER = ["brisel", "adulam", "prez", "crm", "barbus", "costflow", "psicoquiz", "codegurex-com", "security-lab"];
+WORK.sort((a, b) => WORK_ORDER.indexOf(a.id) - WORK_ORDER.indexOf(b.id));
 
 // Other verified-by-owner work without a full case study yet.
 export const INDEX_ONLY = [

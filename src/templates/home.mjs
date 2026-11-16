@@ -43,7 +43,20 @@ export function home(lang) {
     })
     .join("");
 
-  const featured = ["prez", "barbus", "crm"].map(workById);
+  const featured = ["brisel", "prez", "adulam"].map(workById);
+  const more = ["crm", "barbus", "costflow"].map(workById);
+  const moreCards = more
+    .map(
+      (w) => `<li class="work-item">
+  <a href="${workPath(w, lang)}">
+    <div class="thumb">${picture(w.images[0][0], tx(w.images[0][1], lang), { sizes: "(min-width: 1180px) 30vw, (min-width: 760px) 45vw, 100vw" })}</div>
+    <div class="meta mono"><span>${t(w.sector, lang).split(" · ")[0]}</span>${statusTag(w.status, lang)}</div>
+    <h3>${esc(tx(w.name, lang))}</h3>
+    <p>${t(w.kind, lang)}</p>
+  </a>
+</li>`,
+    )
+    .join("");
   const plates = featured
     .map((w, i) => {
       const fig = w.images.length
@@ -124,13 +137,15 @@ export function home(lang) {
   <div class="wrap">
     ${sheetLabel("02", L("Trabajo seleccionado", "Selected work"), lang)}
     <div class="section-head">
-      <h2 id="work-title">${tr("Software que hoy usan negocios reales.", "Software real businesses use today.")}</h2>
+      <h2 id="work-title">${tr("Productos digitales que se ven, se usan y venden.", "Digital products that look sharp, work hard and sell.")}</h2>
       <p>${tr(
         "Cada proyecto indica su estado y la evidencia que lo respalda. No publicamos métricas que no podamos demostrar.",
         "Every project states its status and the evidence behind it. We do not publish metrics we cannot prove.",
       )}</p>
     </div>
     <div class="plates">${plates}</div>
+    <h3 class="more-title mono">${tr("Más sistemas en uso", "More systems in use")}</h3>
+    <ul class="work-grid">${moreCards}</ul>
     <p class="actions more"><a class="btn btn-line" href="${route("work", lang)}">${tr("Ver el portafolio completo", "See the full portfolio")}</a></p>
   </div>
 </section>

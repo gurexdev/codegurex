@@ -2150,3 +2150,26 @@ fieldset.field {
   max-width: 22ch;
   margin-bottom: 2rem;
 }
+
+/* ---------- Portfolio hierarchy ---------- */
+.more-title {
+  margin: clamp(4rem, 3rem + 3vw, 6rem) 0 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ink);
+  color: var(--muted);
+  font-stretch: 100%;
+}
+@media (min-width: 760px) {
+  .work-grid {
+    grid-auto-flow: dense;
+  }
+  .work-grid .is-spotlight {
+    grid-column: span 2;
+  }
+  .work-grid .is-spotlight .thumb {
+    aspect-ratio: 16 / 8.3;
+  }
+  .work-grid .is-spotlight h3 {
+    font-size: clamp(1.8rem, 1.4rem + 1.2vw, 2.4rem);
+  }
+}

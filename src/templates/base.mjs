@@ -2,7 +2,7 @@ import { SITE, ROUTES, NAV, UI, STATUS, STATUS_TONE, LOCALE } from "../content/s
 import { SERVICES, TRACKS } from "../content/services.mjs";
 import { WORK } from "../content/work.mjs";
 
-export const ASSET_VERSION = "3";
+export const ASSET_VERSION = "4";
 
 /* ---------- Helpers ---------- */
 export const esc = (value) =>
