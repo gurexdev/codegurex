@@ -172,7 +172,8 @@ export const WORK = [
       L("Importación y exportación de Excel", "Excel import and export"),
     ],
     stack: [
-      ["JavaScript", L("Aplicación modular (~2.750 líneas en 10 módulos)", "Modular app (~2,750 lines across 10 modules)")],
+      [L("Arquitectura modular", "Modular architecture"), L("10 módulos (autenticación, analítica, gráficos, importación, detalle) en ~2.750 líneas", "10 modules (auth, analytics, charts, import, detail views) in ~2,750 lines")],
+      ["Chart.js · SheetJS", L("Tendencias de 12 meses, sparklines e importación y exportación de Excel en el navegador", "12-month trends, sparklines and in-browser Excel import and export")],
       [L("Gráficos", "Charts"), L("Tendencias de 12 meses y sparklines", "12-month trends and sparklines")],
       ["Supabase", L("Autenticación y datos en la versión de producción", "Authentication and data in the production version")],
       ["PWA", L("Uso desde el móvil del vendedor", "Use from the rep's phone")],
@@ -400,8 +401,8 @@ export const WORK = [
       "A framework-free JavaScript app with 59 questions across nine areas, scoring with streaks and combos, a leaderboard stored in the browser and an admin panel that generates questions from plain text.",
     ),
     architecture: [
-      [L("Interfaz", "Interface"), ["HTML · CSS", L("6 modos", "6 modes")]],
-      [L("Lógica", "Logic"), ["JavaScript", L("Puntuación y temporizadores", "Scoring and timers")]],
+      [L("Interfaz", "Interface"), [L("Sin framework", "Framework-free"), L("6 modos", "6 modes")]],
+      [L("Lógica", "Logic"), [L("Motor de puntuación", "Scoring engine"), L("Rachas, combos y temporizadores", "Streaks, combos and timers")]],
       [L("Persistencia", "Storage"), ["localStorage", L("Sin servidor", "Serverless")]],
     ],
     features: [
@@ -411,7 +412,7 @@ export const WORK = [
       L("Generador de preguntas desde texto", "Question generator from plain text"),
     ],
     stack: [
-      ["JavaScript", L("Lógica de la aplicación (~800 líneas) y banco de preguntas", "App logic (~800 lines) and question bank")],
+      [L("Motor de juego propio", "Custom game engine"), L("Puntuación con rachas y multiplicadores, temporizadores y generador de preguntas a partir de texto (~800 líneas)", "Scoring with streaks and multipliers, timers and a text-to-question generator (~800 lines)")],
       ["localStorage", L("Ranking y progreso sin servidor", "Leaderboard and progress without a server")],
     ],
     contribution: L("Concepto, diseño y desarrollo.", "Concept, design and development."),
@@ -459,8 +460,8 @@ export const WORK = [
       L("Redirecciones para URLs anteriores", "Redirects for previous URLs"),
     ],
     stack: [
-      ["HTML · CSS · JavaScript", L("Sin framework en el cliente", "No client-side framework")],
-      ["Node.js", L("Generador y validador", "Generator and validator")],
+      [L("Generador estático (Node.js ESM)", "Static generator (Node.js ESM)"), L("Contenido bilingüe como datos y plantillas; cero dependencias en ejecución", "Bilingual content as data and templates; zero runtime dependencies")],
+      [L("Validador propio", "Custom validator"), L("Bloquea el despliegue ante enlaces rotos, hreflang no recíproco, metadatos fuera de rango o código que viole la CSP", "Blocks deployment on broken links, non-reciprocal hreflang, out-of-range metadata or code that breaks the CSP")],
       ["GitHub Actions", L("Validación y despliegue continuo", "Validation and continuous deployment")],
     ],
     contribution: L("Estrategia, diseño, contenido, desarrollo y seguridad.", "Strategy, design, content, development and security."),

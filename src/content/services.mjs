@@ -69,7 +69,7 @@ export const SERVICES = [
       L("Guía de mantenimiento y despliegue", "Maintenance and deployment guide"),
       L("Informe técnico de rendimiento y SEO", "Technical performance and SEO report"),
     ],
-    capabilities: ["HTML", "CSS", "JavaScript", "Next.js", "SEO", "GitHub Actions", "Vercel", "Cloudflare"],
+    capabilities: ["Next.js", "Astro", "TypeScript", "Core Web Vitals", "JSON-LD", "Cloudflare", "GitHub Actions"],
     evidence: ["codegurex-com", "adulam", "brisel"],
   },
   {
@@ -178,7 +178,7 @@ export const SERVICES = [
       L("Manual de uso", "User guide"),
       L("Soporte durante la adopción", "Support during adoption"),
     ],
-    capabilities: ["JavaScript", "Charts", "Excel I/O", "Supabase", "PWA"],
+    capabilities: ["TypeScript", "PostgreSQL", "Supabase", "Prisma", "Chart.js", "SheetJS", "PWA"],
     evidence: ["crm", "barbus", "costflow"],
   },
   {

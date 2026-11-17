@@ -192,13 +192,13 @@ export function home(lang) {
   <div class="wrap">
     ${sheetLabel("05", L("Tecnología", "Technology"), lang)}
     <div class="section-head">
-      <h2 id="tech-title">${tr("Herramientas elegidas por el problema, no por moda.", "Tools chosen for the problem, not for fashion.")}</h2>
+      <h2 id="tech-title">${tr("Ingeniería de software con estándares de producción.", "Software engineering to production standards.")}</h2>
       <p>${tr(
-        "TypeScript, Next.js y React en la interfaz; PostgreSQL con Row Level Security en los datos; Cloudflare, Vercel y GitHub Actions para desplegar; Python para herramientas de seguridad.",
-        "TypeScript, Next.js and React on the interface; PostgreSQL with Row Level Security for data; Cloudflare, Vercel and GitHub Actions to ship; Python for security tooling.",
+        "Next.js 16 con React Server Components, PostgreSQL con Row Level Security verificada por pruebas, despliegue en el edge con Cloudflare Workers, CI con Playwright y pgTAP, y modelado de amenazas antes de escribir la primera línea.",
+        "Next.js 16 with React Server Components, PostgreSQL with test-verified Row Level Security, edge deployment on Cloudflare Workers, CI with Playwright and pgTAP, and threat modelling before the first line of code.",
       )}</p>
     </div>
-    <a class="arrow-link" href="${route("technology", lang)}">${tr("Cómo usamos cada tecnología", "How we use each technology")}</a>
+    <a class="arrow-link" href="${route("technology", lang)}">${tr("Ver nuestro stack y prácticas de ingeniería", "See our stack and engineering practices")}</a>
   </div>
 </section>
 ${ctaBand(lang)}`;
