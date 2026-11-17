@@ -57,12 +57,12 @@ export const PAGE_SEO = {
     h1: L("CodeGurex Sentinel: seguridad para la era de la IA", "CodeGurex Sentinel: security for the AI era"),
   },
   technology: {
-    title: L("Tecnologías: Next.js, Supabase, Cloudflare y más | CodeGurex", "Our stack: Next.js, Supabase, Cloudflare | CodeGurex"),
+    title: L("Stack técnico: Next.js, PostgreSQL y Cloudflare | CodeGurex", "Engineering stack: Next.js, Postgres, Cloudflare"),
     description: L(
-      "TypeScript, Next.js, React, PostgreSQL con Row Level Security, Cloudflare, Vercel, Playwright y Python: cómo y para qué los usamos en proyectos reales.",
-      "TypeScript, Next.js, React, PostgreSQL with Row Level Security, Cloudflare, Vercel, Playwright and Python: how and why we use them on real projects.",
+      "Next.js 16, React Server Components, PostgreSQL con Row Level Security, Cloudflare Workers, Playwright, pgTAP y modelado de amenazas en proyectos reales.",
+      "Next.js 16, React Server Components, PostgreSQL Row Level Security, Cloudflare Workers, Playwright, pgTAP and threat modelling on real projects.",
     ),
-    h1: L("Tecnologías que usamos en proyectos reales.", "Technologies we use on real projects."),
+    h1: L("Ingeniería de software con estándares de producción.", "Software engineering to production standards."),
   },
   about: {
     title: L("Empresa de software y ciberseguridad en Manta | CodeGurex", "About CodeGurex: software & security, Ecuador"),

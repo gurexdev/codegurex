@@ -22,88 +22,127 @@ import {
 const L = (es, en) => ({ es, en });
 
 /* ---------- Technology ---------- */
+// Engineering disciplines, not languages. Every row names the project where it is used,
+// and every figure is counted from the repositories (2026-11-17).
+const METRICS = [
+  ["94", L("políticas Row Level Security en PostgreSQL", "Row Level Security policies in PostgreSQL"), "PREZ"],
+  ["37", L("funciones de base de datos con privilegios endurecidos", "database functions with hardened privileges"), "PREZ"],
+  ["4", L("trabajos de CI que validan cada cambio antes de fusionarlo", "CI jobs that validate every change before merge"), "PREZ"],
+  ["24", L("decisiones de arquitectura documentadas (ADR)", "documented architecture decisions (ADRs)"), "PREZ"],
+  ["100", L("en las cuatro categorías de Lighthouse móvil", "across all four mobile Lighthouse categories"), "BRISEL"],
+  ["0", L("problemas de accesibilidad WCAG 2 AA (axe) en producción", "WCAG 2 AA accessibility issues (axe) in production"), "BRISEL · ADULAM · CodeGurex"],
+];
+
+const PIPELINE = [
+  [L("Calidad", "Quality"), [L("Formato (Prettier)", "Formatting (Prettier)"), L("ESLint, cero avisos", "ESLint, zero warnings"), L("TypeScript estricto", "Strict TypeScript"), "Vitest", "pnpm audit"]],
+  [L("Base de datos", "Database"), [L("Migraciones desde cero", "Migrations from scratch"), L("pgTAP: RLS y privilegios", "pgTAP: RLS and privileges"), L("Supabase advisors (falla con un aviso)", "Supabase advisors (fail on warning)")]],
+  [L("Extremo a extremo", "End to end"), [L("Build de producción", "Production build"), L("Playwright en móvil, tablet y escritorio", "Playwright on mobile, tablet and desktop"), L("axe-core", "axe-core")]],
+  [L("Identidad", "Identity"), [L("Supabase local con Auth y correo", "Local Supabase with Auth and email"), L("Registro, recuperación y MFA TOTP", "Sign-up, recovery and TOTP MFA"), L("Matriz Node.js / workerd", "Node.js / workerd matrix")]],
+];
+
 const TECH = [
   {
     code: "T1",
-    name: L("Interfaz", "Frontend"),
+    name: L("Arquitectura de aplicaciones", "Application architecture"),
     why: L(
-      "Interfaces rápidas y accesibles. Usamos frameworks cuando el producto los necesita y HTML sin dependencias cuando no.",
-      "Fast, accessible interfaces. We use frameworks when the product needs them and dependency-free HTML when it does not.",
+      "Elegimos la arquitectura por el problema: renderizado en servidor para productos con datos privados, sitios estáticos para contenido y JavaScript mínimo cuando la velocidad en el celular decide la venta.",
+      "We choose the architecture for the problem: server rendering for products with private data, static sites for content, and minimal JavaScript when phone speed decides the sale.",
     ),
     rows: [
-      ["HTML · CSS · JavaScript", L("Sitios livianos y fáciles de mantener (Adulam, PsicoQuiz, este sitio)", "Lightweight, maintainable sites (Adulam, PsicoQuiz, this site)")],
-      ["TypeScript", L("Modo estricto en productos con lógica de negocio", "Strict mode in products with business logic")],
-      ["React 19 · Next.js 16", L("App Router, Server Components y Server Actions", "App Router, Server Components and Server Actions")],
-      ["Tailwind CSS 4", L("Sistemas de interfaz con tokens propios", "Interface systems with custom tokens")],
-      ["PWA", L("Aplicaciones instalables para uso móvil diario", "Installable apps for daily mobile use")],
+      ["Next.js 16 · React 19", L("App Router con React Server Components y Server Actions; Cache Components y Partial Prefetching en PREZ", "App Router with React Server Components and Server Actions; Cache Components and Partial Prefetching in PREZ"), "PREZ · Finance"],
+      [L("Monolito modular", "Modular monolith"), L("10 dominios de negocio (entrenamiento, nutrición, consultas, administración…) en un solo despliegue, sin microservicios innecesarios", "10 business domains (training, nutrition, consultations, admin…) in one deployment, without needless microservices"), "PREZ"],
+      ["Astro", L("Sitios de contenido que funcionan completos sin JavaScript, con imágenes optimizadas en el build", "Content sites that work fully without JavaScript, with build-time image optimization"), "ADULAM"],
+      ["Preact · Vite", L("Aplicaciones con estado complejo en ≈11 KB de JavaScript comprimido", "Apps with complex state in ≈11 KB of compressed JavaScript"), "BRISEL"],
+      ["History API", L("Capas de interfaz sincronizadas con el botón atrás y enlaces compartibles por ficha", "UI layers synced with the back button and shareable per-item links"), "BRISEL"],
+      ["PWA · Service Workers", L("Aplicaciones instalables desde el navegador; con página sin conexión en PREZ", "Browser-installable apps, with an offline page in PREZ"), "PREZ · CRM · Finance"],
+      [L("Generador estático propio (Node.js ESM)", "Custom static generator (Node.js ESM)"), L("Sitio bilingüe sin dependencias en ejecución, con validación previa al despliegue", "Bilingual site with zero runtime dependencies and pre-deploy validation"), "CodeGurex.com"],
     ],
   },
   {
     code: "T2",
-    name: L("Backend y datos", "Backend & data"),
+    name: L("Datos, identidad y multi-tenancy", "Data, identity and multi-tenancy"),
     why: L(
-      "La autorización vive en el servidor y en la base de datos, nunca solo en la interfaz.",
-      "Authorization lives on the server and in the database — never in the interface alone.",
+      "La autorización se aplica en la base de datos, no solo en la interfaz. Así un error en una pantalla no se convierte en una fuga de datos entre clientes.",
+      "Authorization is enforced in the database, not only in the interface, so a bug on one screen never becomes a data leak between customers.",
     ),
     rows: [
-      ["PostgreSQL", L("Modelo relacional con migraciones versionadas", "Relational model with versioned migrations")],
-      ["Supabase", L("Auth, Postgres, Storage y Row Level Security", "Auth, Postgres, Storage and Row Level Security")],
-      ["Prisma 7", L("Acceso tipado a datos en herramientas internas", "Typed data access in internal tools")],
-      ["Zod", L("Validación de cada entrada en el servidor", "Validation of every server input")],
-      ["REST · Route Handlers · Webhooks", L("APIs e integraciones", "APIs and integrations")],
+      ["PostgreSQL · PL/pgSQL", L("Modelo relacional, triggers y funciones SECURITY DEFINER con privilegios revocados por defecto", "Relational modelling, triggers and SECURITY DEFINER functions with privileges revoked by default"), "PREZ · Finance"],
+      ["Row Level Security", L("Aislamiento por usuario y por organización en cada tabla, verificado con pruebas", "Per-user and per-organization isolation on every table, verified by tests"), "PREZ · BARBUS"],
+      ["Supabase Auth · Storage", L("Verificación de correo, recuperación, MFA TOTP obligatorio para el personal y archivos con políticas", "Email verification, recovery, mandatory TOTP MFA for staff and policy-guarded storage"), "PREZ"],
+      [L("Migraciones SQL versionadas", "Versioned SQL migrations"), L("La base completa se reconstruye desde cero en cada ejecución de CI", "The whole database is rebuilt from scratch on every CI run"), "PREZ"],
+      ["Prisma 7 · driver adapters", L("Acceso tipado a 9 modelos con transacciones y validación de propiedad en cada acción", "Typed access to 9 models with transactions and ownership checks on every action"), "Finance"],
+      ["Zod", L("Contratos de datos validados en cada frontera del servidor", "Data contracts validated at every server boundary"), "PREZ"],
     ],
   },
   {
     code: "T3",
-    name: L("Infraestructura y entrega", "Infrastructure & delivery"),
+    name: L("Calidad y pruebas automatizadas", "Quality and automated testing"),
     why: L(
-      "Despliegues reproducibles, entornos de vista previa y nada de secretos en el repositorio.",
-      "Reproducible deployments, preview environments and no secrets in the repository.",
+      "Una fase se cierra con evidencia. Las pruebas corren solas en cada cambio y bloquean la fusión si algo falla.",
+      "A phase closes with evidence. Tests run automatically on every change and block the merge when something fails.",
     ),
     rows: [
-      ["Cloudflare Workers · OpenNext", L("Next.js ejecutado en el borde", "Next.js running at the edge")],
-      ["Vercel", L("Despliegue de productos y demos", "Product and demo deployment")],
-      ["GitHub Pages · GitHub Actions", L("CI, validación y despliegue continuo", "CI, validation and continuous deployment")],
-      ["gitleaks", L("Detección de secretos en CI", "Secret scanning in CI")],
+      [L("TypeScript estricto", "Strict TypeScript"), L("Tipos de punta a punta, con rutas tipadas generadas", "End-to-end types, including generated typed routes"), "PREZ · BRISEL · Finance"],
+      ["Playwright", L("E2E en tres tamaños de pantalla, incluidos registro, recuperación y MFA con códigos TOTP generados en la prueba", "E2E at three screen sizes, including sign-up, recovery and MFA with TOTP codes generated in the test"), "PREZ"],
+      ["pgTAP", L("10 suites de pruebas SQL sobre RLS, privilegios y paneles administrativos", "10 SQL test suites covering RLS, privileges and admin panels"), "PREZ"],
+      ["Vitest", L("Pruebas unitarias de esquemas, precios y reglas de negocio", "Unit tests for schemas, pricing and business rules"), "PREZ"],
+      ["axe-core · Lighthouse", L("Accesibilidad WCAG 2.2 AA y rendimiento medidos por script, también sin JavaScript", "WCAG 2.2 AA accessibility and performance measured by script, including a no-JavaScript pass"), "ADULAM"],
     ],
   },
   {
     code: "T4",
-    name: L("Calidad", "Quality"),
-    why: L("Una fase se cierra con pruebas, no con una impresión.", "A phase closes with tests, not with an impression."),
+    name: L("Seguridad aplicada (DevSecOps)", "Applied security (DevSecOps)"),
+    why: L(
+      "La seguridad empieza en el diseño: modelamos amenazas antes de programar y automatizamos los controles para que no dependan de la memoria de nadie.",
+      "Security starts at design time: we model threats before writing code and automate controls so they never depend on anyone's memory.",
+    ),
     rows: [
-      ["Vitest", L("Pruebas unitarias de esquemas y reglas", "Unit tests for schemas and rules")],
-      ["Playwright · axe-core", L("E2E, responsive y accesibilidad", "E2E, responsive and accessibility")],
-      ["pgTAP", L("Pruebas SQL de aislamiento entre usuarios", "SQL tests for isolation between users")],
-      ["ESLint · Prettier", L("Cero avisos permitidos", "Zero warnings allowed")],
+      [L("Modelado de amenazas STRIDE", "STRIDE threat modelling"), L("Por activo y flujo, cruzado con OWASP Top 10 y OWASP API Security Top 10", "Per asset and flow, mapped to the OWASP Top 10 and OWASP API Security Top 10"), "PREZ"],
+      [L("Cabeceras de seguridad", "Security headers"), L("Content Security Policy, HSTS, COOP, Permissions-Policy y frame-ancestors en cada respuesta", "Content Security Policy, HSTS, COOP, Permissions-Policy and frame-ancestors on every response"), "PREZ · CodeGurex.com"],
+      ["gitleaks · pnpm audit", L("Detección de secretos y de dependencias vulnerables en CI", "Secret scanning and vulnerable-dependency checks in CI"), "PREZ"],
+      [L("Criptografía aplicada", "Applied cryptography"), L("Cifrado autenticado Fernet y derivación PBKDF2-HMAC-SHA256 con 480.000 iteraciones", "Fernet authenticated encryption and PBKDF2-HMAC-SHA256 key derivation at 480,000 iterations"), L("Laboratorio", "Security lab")],
+      ["OWASP ASVS · API Top 10 · LLM Top 10", L("Marcos de referencia para evaluar aplicaciones, APIs y sistemas con IA", "Reference frameworks for assessing applications, APIs and AI systems"), L("Servicios de seguridad", "Security services")],
+      ["Burp Suite · Python", L("Pruebas manuales de aplicaciones web y herramientas propias de análisis", "Manual web application testing and in-house analysis tooling"), L("Servicios de seguridad", "Security services")],
     ],
   },
   {
     code: "T5",
-    name: L("Seguridad", "Security"),
+    name: L("Infraestructura, edge y CI/CD", "Infrastructure, edge and CI/CD"),
     why: L(
-      "Marcos públicos y herramientas conocidas, aplicados con criterio y siempre con autorización.",
-      "Public frameworks and well-known tools, applied with judgement and always with authorization.",
+      "Despliegues reproducibles en el borde de la red, sin servidores que mantener y sin secretos en el repositorio.",
+      "Reproducible deployments at the network edge, with no servers to babysit and no secrets in the repository.",
     ),
     rows: [
-      ["OWASP Top 10 · ASVS · API Security", L("Referencia para evaluar aplicaciones y APIs", "Reference for assessing applications and APIs")],
-      ["OWASP Top 10 for LLM Applications", L("Referencia para sistemas con IA", "Reference for AI systems")],
-      ["Burp Suite", L("Pruebas de aplicaciones web", "Web application testing")],
-      ["Python", L("Herramientas propias: cifrado, phishing, escaneo", "In-house tooling: encryption, phishing, scanning")],
-      ["Linux · Redes", L("Formación continua y laboratorios", "Continuous training and labs")],
-      ["RLS · MFA TOTP · CSP · HSTS", L("Controles que implementamos en nuestros productos", "Controls we implement in our products")],
+      ["Cloudflare Workers · OpenNext", L("Next.js ejecutado en el edge; validado contra el runtime workerd en CI", "Next.js running at the edge, validated against the workerd runtime in CI"), "PREZ"],
+      [L("Workers con assets embebidos", "Workers with embedded assets"), L("Sitio completo dentro de un Worker, con caché por ETag y cabeceras de seguridad", "An entire site inside a Worker, with ETag caching and security headers"), "BRISEL"],
+      ["Cloudflare Pages · Vercel", L("Publicación continua de sitios y productos", "Continuous deployment of sites and products"), "ADULAM · BARBUS · CostFlow"],
+      ["GitHub Actions", L("Pipelines con lockfile congelado, servicios efímeros (Supabase en Docker) y despliegue condicionado a la validación", "Pipelines with frozen lockfiles, ephemeral services (Supabase in Docker) and validation-gated deploys"), "PREZ · CodeGurex.com"],
     ],
   },
   {
     code: "T6",
-    name: L("IA", "AI"),
+    name: L("Rendimiento y SEO técnico", "Performance and technical SEO"),
     why: L(
-      "Práctica en crecimiento. Integramos modelos con permisos mínimos, revisión humana y registros; evaluamos sistemas con IA con los marcos de OWASP. Aún no publicamos un caso de IA en producción.",
-      "A growing practice. We integrate models with least privilege, human review and logging, and we assess AI systems using OWASP frameworks. We have not yet published an AI case in production.",
+      "Un sitio lento pierde clientes antes de que lean la primera línea. Medimos Core Web Vitals y optimizamos cada recurso en el build.",
+      "A slow site loses customers before they read the first line. We measure Core Web Vitals and optimize every asset at build time.",
     ),
     rows: [
-      [L("Integración de modelos", "Model integration"), L("Desde el servidor; nunca claves en el cliente", "Server-side; never keys in the client")],
-      [L("Automatización", "Automation"), L("Tareas programadas y flujos con aprobación humana", "Scheduled jobs and human-approved workflows")],
+      ["Core Web Vitals", L("LCP, INP y CLS medidos con Lighthouse en móvil", "LCP, INP and CLS measured with mobile Lighthouse"), "BRISEL · ADULAM · CodeGurex.com"],
+      ["fontTools", L("Instanciado y recorte de fuentes variables a los caracteres del español", "Instancing and subsetting variable fonts down to the characters Spanish needs"), "BRISEL"],
+      ["sharp · ffmpeg", L("Imágenes WebP responsivas generadas en el build y video recomprimido de 21 MB a 4,3 MB", "Responsive WebP images generated at build time and video recompressed from 21 MB to 4.3 MB"), "ADULAM"],
+      ["JSON-LD · hreflang · llms.txt", L("Datos estructurados (MedicalClinic, ProfessionalService, BlogPosting), sitios bilingües y legibilidad para buscadores con IA", "Structured data (MedicalClinic, ProfessionalService, BlogPosting), bilingual sites and readability for AI search"), "ADULAM · CodeGurex.com"],
+    ],
+  },
+  {
+    code: "T7",
+    name: L("IA", "AI"),
+    why: L(
+      "Práctica en crecimiento. Integramos modelos desde el servidor, con permisos mínimos, revisión humana y registros, y evaluamos sistemas con IA con los marcos de OWASP. Aún no publicamos un caso de IA en producción.",
+      "A growing practice. We integrate models server-side with least privilege, human review and logging, and assess AI systems with OWASP frameworks. We have not yet published an AI case in production.",
+    ),
+    rows: [
+      [L("Integración de modelos", "Model integration"), L("Llamadas desde el servidor; nunca claves en el cliente", "Server-side calls; never keys in the client"), L("Servicio de IA", "AI service")],
+      [L("Seguridad de IA", "AI security"), L("Inyección de prompts, RAG, herramientas, agentes y servidores MCP", "Prompt injection, RAG, tools, agents and MCP servers"), L("Servicio de seguridad de IA", "AI security service")],
     ],
   },
 ];
@@ -111,11 +150,14 @@ const TECH = [
 export function technology(lang) {
   const tr = (es, en) => (lang === "es" ? es : en);
   const trail = [[route("technology", lang), tr("Tecnología", "Technology")]];
+  const metrics = METRICS.map(
+    ([n, label, where]) => `<li><strong>${esc(n)}</strong><span>${t(label, lang)}</span><small class="mono">${t(where, lang)}</small></li>`,
+  ).join("");
   const groups = TECH.map(
     (g) => `<section class="tech-group" aria-labelledby="${g.code}">
   <div><p class="mono muted">${g.code}</p><h2 id="${g.code}">${t(g.name, lang)}</h2><p>${t(g.why, lang)}</p></div>
-  <table class="spec-table"><thead><tr><th scope="col">${tr("Tecnología", "Technology")}</th><th scope="col">${tr("Cómo la usamos", "How we use it")}</th></tr></thead><tbody>
-  ${g.rows.map(([a, b]) => `<tr><th scope="row">${t(a, lang)}</th><td>${t(b, lang)}</td></tr>`).join("")}
+  <table class="spec-table tech-table"><thead><tr><th scope="col">${tr("Tecnología", "Technology")}</th><th scope="col">${tr("Cómo la usamos", "How we use it")}</th><th scope="col">${tr("Dónde", "Where")}</th></tr></thead><tbody>
+  ${g.rows.map(([a, b, c]) => `<tr><th scope="row">${t(a, lang)}</th><td>${t(b, lang)}</td><td class="mono">${t(c, lang)}</td></tr>`).join("")}
   </tbody></table>
 </section>`,
   ).join("");
@@ -128,19 +170,55 @@ export function technology(lang) {
       <div>
         <h1>${esc(pageH1("technology", lang))}</h1>
         <p class="lead">${tr(
-          "Sin muros de logotipos. Cada tecnología aparece aquí porque la usamos en un proyecto verificable, y explicamos para qué.",
-          "No wall of logos. Each technology is listed because we use it on a verifiable project, and we explain what for.",
+          "No listamos lenguajes. Mostramos cómo diseñamos, probamos, protegemos y desplegamos sistemas reales. Cada cifra de esta página está contada en nuestros repositorios.",
+          "We do not list languages. We show how we design, test, secure and ship real systems. Every figure on this page is counted from our repositories.",
         )}</p>
       </div>
       ${titleBlock([
-        [tr("Criterio", "Rule"), tr("Solo tecnologías verificadas", "Verified technologies only")],
-        [tr("Grupos", "Groups"), String(TECH.length)],
-        [tr("Actualizado", "Updated"), SITE.updated],
+        [tr("Lenguajes", "Languages"), "TypeScript · SQL · Python"],
+        [tr("Disciplinas", "Disciplines"), String(TECH.length)],
+        [tr("Criterio", "Rule"), tr("Solo lo usado en proyectos reales", "Only what real projects use")],
+        [tr("Actualizado", "Updated"), "2026-11-17"],
       ])}
     </div>
   </div>
 </section>
+<section class="section on-ink" aria-labelledby="metrics-title">
+  <div class="wrap">
+    ${sheetLabel("#", L("En cifras", "By the numbers"), lang)}
+    <h2 id="metrics-title" class="statement">${tr("Estándares de producción, <em>medidos</em>.", "Production standards, <em>measured</em>.")}</h2>
+    <ul class="metrics">${metrics}</ul>
+  </div>
+</section>
+<section class="section on-white" aria-labelledby="pipeline-title">
+  <div class="wrap">
+    ${sheetLabel("CI", L("Integración continua", "Continuous integration"), lang)}
+    <div class="section-head">
+      <h2 id="pipeline-title">${tr("Lo que pasa antes de que un cambio llegue a producción.", "What happens before a change reaches production.")}</h2>
+      <p>${tr(
+        "Este es el pipeline real de PREZ. Cada pull request ejecuta cuatro trabajos en paralelo y no se puede fusionar si uno falla.",
+        "This is PREZ's actual pipeline. Every pull request runs four jobs in parallel and cannot be merged if one fails.",
+      )}</p>
+    </div>
+    <ol class="pipeline">${PIPELINE.map(
+      ([name, steps], i) => `<li><p class="mono"><b>JOB ${i + 1}</b> ${t(name, lang)}</p><ul>${steps.map((st) => `<li>${t(st, lang)}</li>`).join("")}</ul></li>`,
+    ).join("")}</ol>
+    <p class="pipeline-gate mono">${tr("Los 4 en verde → se puede fusionar a main · el despliegue a producción requiere autorización", "All 4 green → merge to main allowed · production deploys require sign-off")}</p>
+  </div>
+</section>
 <section class="section"><div class="wrap">${groups}</div></section>
+<section class="section on-white rule-top" aria-labelledby="process-title">
+  <div class="wrap">
+    <div class="split">
+      <h2 id="process-title">${tr("Ingeniería documentada", "Documented engineering")}</h2>
+      <div class="body"><p>${tr(
+        "Cada producto serio arranca con una auditoría inicial y deja por escrito su arquitectura, su modelo de datos, su modelo de amenazas, su estrategia de pruebas y cada decisión técnica con su alternativa descartada. En PREZ son 24 decisiones registradas, y ninguna fase se cierra sin evidencia.",
+        "Every serious product starts with an initial audit and documents its architecture, data model, threat model, testing strategy and every technical decision with the alternative it rejected. PREZ has 24 recorded decisions, and no phase closes without evidence.",
+      )}</p>
+      <a class="arrow-link" href="${workPath(workById("prez"), lang)}">${tr("Ver el caso PREZ", "See the PREZ case study")}</a></div>
+    </div>
+  </div>
+</section>
 ${ctaBand(lang)}`;
 
   return page({
