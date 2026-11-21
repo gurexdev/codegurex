@@ -103,8 +103,8 @@ export const ARTICLES = [
     related: [["service", "application-security"], ["service", "api-security"], ["work", "security-lab"]],
     body: [
       ["p", L(
-        "Un pentest web —o prueba de penetración— es una evaluación autorizada en la que un especialista intenta encontrar fallos de seguridad explotables en tu aplicación, igual que lo haría un atacante, pero con permiso, con un alcance acordado y con el objetivo de que los corrijas antes de que alguien los aproveche.",
-        "A web pentest — or penetration test — is an authorized assessment in which a specialist tries to find exploitable security flaws in your application the way an attacker would, but with permission, an agreed scope and the goal of having you fix them before anyone abuses them.",
+        "Un pentest web —o prueba de penetración— es una evaluación autorizada: un especialista busca fallos de seguridad explotables en tu aplicación, igual que lo haría un atacante. La diferencia es que trabaja con permiso, con un alcance acordado y para que corrijas esos fallos antes de que alguien los aproveche.",
+        "A web pentest — or penetration test — is an authorized assessment: a specialist looks for exploitable security flaws in your application the way an attacker would. The difference is permission, an agreed scope and a single goal — getting those flaws fixed before anyone abuses them.",
       )],
       ["h2", L("Pentest no es lo mismo que un escaneo automático", "A pentest is not the same as an automated scan")],
       ["p", L(

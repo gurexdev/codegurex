@@ -2274,3 +2274,186 @@ fieldset.field {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* ---------- Global strip (home) ---------- */
+.global-strip {
+  border-bottom: 1px solid var(--rule);
+  background: var(--white);
+  padding-block: 1.75rem;
+}
+.global-strip h2 {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  font-stretch: 100%;
+  letter-spacing: 0.08em;
+}
+.global-strip ul {
+  list-style: none;
+  display: grid;
+  gap: 1rem 2rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+.global-strip li {
+  display: grid;
+  gap: 0.2rem;
+}
+.global-strip strong {
+  font-size: 1.35rem;
+  font-weight: 700;
+  font-stretch: 118%;
+  color: var(--blue);
+  letter-spacing: -0.01em;
+}
+.global-strip span {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+@media (min-width: 900px) {
+  .global-strip ul {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------- Service page layout ---------- */
+.svc-intro {
+  display: grid;
+  gap: 2.5rem;
+}
+.svc-intro h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.2rem);
+  max-width: 22ch;
+  margin-bottom: 1.25rem;
+}
+.svc-intro p {
+  max-width: 60ch;
+}
+.svc-grid {
+  display: grid;
+  gap: 2.5rem;
+}
+.svc-grid h3,
+.svc-intro h3 {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  font-stretch: 100%;
+  margin: 0 0 0.75rem;
+}
+.svc-grid .tags {
+  margin-top: 0;
+}
+.svc-grid h3 + .checklist {
+  margin-bottom: 0;
+}
+.deliverables {
+  list-style: none;
+  counter-reset: d;
+  margin-bottom: 2rem;
+  border-top: 1px solid var(--rule);
+}
+.deliverables li {
+  counter-increment: d;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.deliverables li::before {
+  content: "D" counter(d);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--blue);
+  font-weight: 600;
+  padding-top: 0.15rem;
+}
+.why {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  border-left: 3px solid var(--blue);
+  background: var(--paper);
+  max-width: 78ch;
+}
+.why h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+.why p:last-child {
+  margin-bottom: 0;
+}
+@media (min-width: 960px) {
+  .svc-intro,
+  .svc-grid {
+    grid-template-columns: 1.4fr 1fr;
+    gap: 4rem;
+  }
+}
+
+/* ---------- FAQ accordions ---------- */
+.faq-list {
+  border-top: 1px solid var(--ink);
+  max-width: 80ch;
+}
+.faq-list details {
+  border-bottom: 1px solid var(--rule);
+}
+.faq-list summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  font-weight: 650;
+  font-stretch: 106%;
+  font-size: 1.05rem;
+}
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+.faq-list summary::after {
+  content: "+";
+  font-family: var(--mono);
+  color: var(--blue);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.faq-list details[open] summary::after {
+  content: "−";
+}
+.faq-list details p {
+  color: var(--muted);
+  margin: 0 0 1.1rem;
+  max-width: 68ch;
+}
+
+/* ---------- Case snapshot ---------- */
+.snapshot {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  background: var(--rule-strong);
+  border: 1px solid var(--ink);
+}
+.snapshot div {
+  background: var(--white);
+  padding: 1.25rem 1.35rem 1.5rem;
+}
+.snapshot dt {
+  color: var(--blue);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.snapshot dd {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+@media (min-width: 900px) {
+  .snapshot {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

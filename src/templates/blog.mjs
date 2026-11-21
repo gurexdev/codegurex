@@ -135,7 +135,7 @@ export function article(a, lang) {
 <section class="section on-white rule-top" aria-labelledby="related-title">
   <div class="wrap">
     ${sheetLabel("→", L("Relacionado", "Related"), lang)}
-    <h2 id="related-title" class="sr-only">${tr("Servicios y casos relacionados", "Related services and cases")}</h2>
+    <h2 id="related-title" class="sr-only">${tr("Servicios y casos relacionados con", "Services and cases related to")} ${t(a.title, lang)}</h2>
     <ul class="index">${relatedLinks(a.related, lang)}</ul>
   </div>
 </section>

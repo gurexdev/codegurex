@@ -44,6 +44,19 @@ Medido con Lighthouse móvil en producción antes de los cambios: **SEO 83–85*
 | CSS minificado y versión de assets renovada (`?v=2`) | Rendimiento y caché |
 | `llms.txt` incluye artículos y la página local | GEO |
 
+## 2c. Legibilidad y alcance internacional (2026-11-21)
+
+Revisión de un consultor SEO externo: demasiado texto corrido, encabezados genéricos y posicionamiento demasiado local para una cartera de clientes mayoritariamente extranjera.
+
+| Antes | Después |
+|---|---|
+| 21 páginas con párrafos de más de 45 palabras | 0. Los textos se parten en grupos de 1–2 frases (`paras()` y un filtro global en `page()`); `validate.mjs` falla por encima de 60 palabras |
+| H2 genéricos repetidos ("El problema", "Para quién", "Contexto"…) y la llamada final como H2 en 33 páginas por idioma | H2 únicos con el nombre del servicio o proyecto ("Qué incluye: Seguridad de aplicaciones web", "El reto de BRISEL"); la llamada final deja de ser encabezado; `validate.mjs` falla si un H2 se repite en una página |
+| FAQ de servicios siempre abiertas | Acordeones `<details>`: Google las lee, el visitante abre solo la que le interesa |
+| Casos de estudio en 8 bloques de texto | Resumen inicial en tres columnas (reto, solución, resultado) y luego el detalle |
+| Títulos con "en Ecuador" / "en Manta" | Títulos sin ciudad. En inglés, foco *nearshore* (GMT-5, USD, ES/EN), que es como buscan equipos remotos los clientes de EE. UU. |
+| Ubicación solo local | Franja en la portada: GMT-5, facturación en USD, ES·EN, 100 % remoto. `areaServed: Worldwide` primero en el esquema. La página de Manta se mantiene para la búsqueda local |
+
 ## 3. Lo que tienes que hacer tú (en orden de impacto)
 
 ### Urgente — Cloudflare está limitando tu visibilidad

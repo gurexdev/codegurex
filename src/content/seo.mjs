@@ -6,21 +6,21 @@ import { L } from "./site.mjs";
 
 export const PAGE_SEO = {
   home: {
-    title: L("Software a medida y ciberseguridad en Ecuador | CodeGurex", "Software development & cybersecurity company | CodeGurex"),
+    title: L("Desarrollo de software y ciberseguridad | CodeGurex", "Nearshore Software Development & Cybersecurity | CodeGurex"),
     description: L(
-      "Empresa de desarrollo de software, páginas web, SaaS y ciberseguridad en Manta, Ecuador. Diseñamos, construimos y protegemos sistemas para empresas.",
-      "Software development, websites, SaaS and cybersecurity company based in Ecuador. We design, build and secure digital systems for businesses worldwide.",
+      "Desarrollo de software, SaaS, páginas web y ciberseguridad para empresas de cualquier país. Equipo remoto en Ecuador (GMT-5), en español e inglés.",
+      "Nearshore software development, SaaS and cybersecurity from Ecuador: GMT-5 time zone, USD billing, English and Spanish. We build and secure systems.",
     ),
     h1: L(
-      "Desarrollo de software, páginas web y ciberseguridad en Ecuador.",
-      "Software development, websites and cybersecurity from Ecuador.",
+      "Desarrollo de software, SaaS y ciberseguridad para empresas de todo el mundo.",
+      "Software development, SaaS and cybersecurity for companies worldwide.",
     ),
   },
   solutions: {
-    title: L("Soluciones de software para empresas en Ecuador | CodeGurex", "Software solutions for businesses | CodeGurex"),
+    title: L("Soluciones de software para empresas | CodeGurex", "Software solutions for businesses | CodeGurex"),
     description: L(
-      "Páginas web, plataformas, sistemas de gestión, integración de IA y seguridad, organizados según lo que tu empresa necesita resolver. Manta, Ecuador.",
-      "Websites, platforms, business systems, AI integration and security, organized around what your business needs to solve. Based in Ecuador.",
+      "Páginas web, plataformas, sistemas de gestión, integración de IA y seguridad, organizados según lo que tu empresa necesita resolver. Equipo 100 % remoto.",
+      "Websites, platforms, business systems, AI integration and security, organized around what your business needs to solve. A remote-first team.",
     ),
     h1: L("Soluciones de software según lo que tu empresa necesita.", "Software solutions shaped around what your business needs."),
   },
@@ -65,12 +65,12 @@ export const PAGE_SEO = {
     h1: L("Ingeniería de software con estándares de producción.", "Software engineering to production standards."),
   },
   about: {
-    title: L("Empresa de software y ciberseguridad en Manta | CodeGurex", "About CodeGurex: software & security, Ecuador"),
+    title: L("Sobre CodeGurex: software y ciberseguridad desde Ecuador", "About CodeGurex: software & security, Ecuador"),
     description: L(
-      "CodeGurex es una empresa independiente de desarrollo de software y ciberseguridad fundada en Manta, Ecuador, con clientes desde 2022.",
+      "CodeGurex es una empresa independiente de desarrollo de software y ciberseguridad fundada en Manta, Ecuador, con clientes dentro y fuera del país desde 2022.",
       "CodeGurex is an independent software development and cybersecurity company founded in Manta, Ecuador, building for clients since 2022.",
     ),
-    h1: L("Empresa de software y ciberseguridad fundada en Manta, Ecuador.", "A software and cybersecurity company founded in Manta, Ecuador."),
+    h1: L("Empresa de software y ciberseguridad con alcance internacional.", "A software and cybersecurity company with international reach."),
   },
   contact: {
     title: L("Contacto: cotiza tu página web o software | CodeGurex", "Contact: request a software or security quote"),
@@ -90,16 +90,16 @@ export const PAGE_SEO = {
 
 // Location statement reused on service pages (local relevance without doorway pages).
 export const WHERE = L(
-  "CodeGurex trabaja desde Manta, Manabí, y puede atender de forma remota a empresas de cualquier ciudad de Ecuador —Guayaquil, Quito, Portoviejo o Cuenca— y de otros países, en español e inglés.",
-  "CodeGurex works from Manta, Ecuador, and can serve companies remotely anywhere in Ecuador and in other countries, in Spanish and English.",
+  "Trabajamos 100 % en remoto con empresas de cualquier país, en español e inglés, desde Ecuador: zona horaria GMT-5 y facturación en dólares estadounidenses.",
+  "We work 100% remotely with companies in any country, in English and Spanish, from Ecuador: GMT-5 time zone and billing in US dollars.",
 );
 
 export const SERVICE_SEO = {
   "web-development": {
-    title: L("Diseño de páginas web en Manta y Ecuador | CodeGurex", "Corporate website design & development | CodeGurex"),
+    title: L("Diseño y desarrollo de páginas web profesionales | CodeGurex", "Corporate website design & development | CodeGurex"),
     h1: L("Diseño y desarrollo de páginas web corporativas", "Corporate website design and development"),
     description: L(
-      "Diseño de páginas web corporativas rápidas, bilingües y preparadas para Google, con SEO técnico y seguridad incluidos. Desde Manta para todo Ecuador.",
+      "Diseño de páginas web corporativas rápidas, bilingües y preparadas para Google, con SEO técnico y seguridad incluidos, para empresas de cualquier país.",
       "Fast, bilingual, search-ready corporate websites with technical SEO and security built in. Designed and developed by CodeGurex.",
     ),
     why: L(
@@ -114,10 +114,10 @@ export const SERVICE_SEO = {
     ],
   },
   "web-applications": {
-    title: L("Desarrollo de software a medida en Ecuador | CodeGurex", "Custom web application development | CodeGurex"),
+    title: L("Desarrollo de software a medida | CodeGurex", "Nearshore Custom Software Development | CodeGurex"),
     h1: L("Desarrollo de software y aplicaciones web a medida", "Custom software and web application development"),
     description: L(
-      "Desarrollo de software a medida: aplicaciones web, portales y herramientas internas con usuarios, permisos e importación de Excel. Manta, Ecuador.",
+      "Desarrollo de software a medida: aplicaciones web, portales y herramientas internas con usuarios, permisos e importación de Excel. Equipo remoto en español e inglés.",
       "Custom software development: web applications, portals and internal tools with users, permissions and Excel import, built by CodeGurex.",
     ),
     why: L(
@@ -150,10 +150,10 @@ export const SERVICE_SEO = {
     ],
   },
   "business-systems": {
-    title: L("Sistemas de gestión y CRM a medida en Ecuador | CodeGurex", "Custom CRM and business management systems | CodeGurex"),
+    title: L("Sistemas de gestión y CRM a medida | CodeGurex", "Custom CRM and business management systems | CodeGurex"),
     h1: L("Sistemas de gestión y CRM a medida", "Custom CRM and business management systems"),
     description: L(
-      "CRM de ventas, inventario, caja y reportes a medida: metas, rankings, alertas e importación de Excel. Dejamos atrás las hojas de cálculo. Ecuador.",
+      "CRM de ventas, inventario, caja y reportes a medida: metas, rankings, alertas e importación de Excel. Para dejar atrás las hojas de cálculo.",
       "Custom sales CRM, inventory, cash and reporting: targets, rankings, alerts and Excel import. Move beyond spreadsheets with CodeGurex.",
     ),
     why: L(
@@ -189,7 +189,7 @@ export const SERVICE_SEO = {
     title: L("Integración de IA y automatización para empresas | CodeGurex", "AI integration and business automation | CodeGurex"),
     h1: L("Integración de inteligencia artificial y automatización de procesos", "AI integration and business process automation"),
     description: L(
-      "Integramos IA y automatizamos procesos con un piloto acotado y medible: permisos mínimos, revisión humana y datos protegidos. Para empresas en Ecuador.",
+      "Integramos IA y automatizamos procesos con un piloto acotado y medible: permisos mínimos, revisión humana y datos protegidos. Para empresas de cualquier país.",
       "We integrate AI and automate processes starting with a scoped, measurable pilot: least privilege, human review and protected data.",
     ),
     why: L(
@@ -204,7 +204,7 @@ export const SERVICE_SEO = {
     ],
   },
   "application-security": {
-    title: L("Pentesting web y auditoría de seguridad en Ecuador", "Web application pentesting & security audits | CodeGurex"),
+    title: L("Pentesting web y auditoría de seguridad | CodeGurex", "Web application pentesting & security audits | CodeGurex"),
     h1: L("Pentesting y evaluación de seguridad de aplicaciones web", "Web application pentesting and security assessment"),
     description: L(
       "Pentesting web autorizado: autenticación, sesiones, control de acceso, configuración y dependencias, con evidencia y un plan de corrección priorizado.",

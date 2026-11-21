@@ -112,6 +112,18 @@ export function home(lang) {
   </div>
 </section>
 
+<section class="global-strip" aria-labelledby="global-title">
+  <div class="wrap">
+    <h2 id="global-title" class="mono">${tr("Equipo remoto para clientes de cualquier país", "A remote team for clients in any country")}</h2>
+    <ul>
+      <li><strong>GMT-5</strong><span>${tr("Horario alineado con EE. UU. y Latinoamérica", "Working hours aligned with the US and Latin America")}</span></li>
+      <li><strong>USD</strong><span>${tr("Facturación en dólares estadounidenses", "Billing in US dollars")}</span></li>
+      <li><strong>ES · EN</strong><span>${tr("Reuniones y documentación en español e inglés", "Meetings and documentation in English and Spanish")}</span></li>
+      <li><strong>100 %</strong><span>${tr("Remoto: videollamadas y entregas revisables en línea", "Remote: video calls and reviewable online previews")}</span></li>
+    </ul>
+  </div>
+</section>
+
 <section class="section" aria-labelledby="cap-title">
   <div class="wrap">
     ${sheetLabel("01", L("Capacidades", "Capabilities"), lang)}
@@ -218,7 +230,7 @@ ${ctaBand(lang)}`;
       slogan: "Technology. Software. Security.",
       description,
       address: { "@type": "PostalAddress", addressLocality: "Manta", addressRegion: "Manabí", addressCountry: "EC" },
-      areaServed: [{ "@type": "Country", name: "Ecuador" }, { "@type": "Place", name: "Worldwide" }],
+      areaServed: [{ "@type": "Place", name: "Worldwide" }, { "@type": "Country", name: "Ecuador" }],
       foundingLocation: { "@type": "Place", name: "Manta, Ecuador" },
       founder: { "@type": "Person", name: "Jose Alejandro Gutierrez Guerrero", jobTitle: "CEO & Founder" },
       sameAs: [SITE.linkedin, SITE.github],
