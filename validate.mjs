@@ -92,6 +92,16 @@ for (const [url, { file, html }] of pages) {
   if (!/<head>\s*<!-- Google tag \(gtag\.js\) -->\s*<script src="\/assets\/analytics\.js[^"]*"><\/script>\s*<script async src="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-3NH66XEY32"><\/script>/.test(html))
     fail(file, "Google tag must follow <head> immediately");
 
+  // Readability: no wall-of-text paragraphs, no repeated H2s within a page.
+  const main = html.match(/<main id="main">([\s\S]*)<\/main>/)?.[1] || "";
+  for (const m of main.matchAll(/<p(?:\s[^>]*)?>([\s\S]*?)<\/p>/g)) {
+    const words = m[1].replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+    if (words > 60) fail(file, `paragraph of ${words} words (max 60): "${m[1].replace(/<[^>]+>/g, "").slice(0, 60)}…"`);
+  }
+  const h2s = [...main.matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/g)].map((m) => m[1].replace(/<[^>]+>/g, "").trim());
+  const dupH2 = h2s.filter((h, i) => h2s.indexOf(h) !== i);
+  if (dupH2.length) fail(file, `repeated H2: ${[...new Set(dupH2)].join(" | ")}`);
+
   const title = html.match(/<title>([^<]*)<\/title>/)?.[1];
   const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1];
   if (!title) fail(file, "missing <title>");

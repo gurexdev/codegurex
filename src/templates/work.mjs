@@ -12,6 +12,7 @@ import {
   crumbs,
   breadcrumbSchema,
   titleBlock,
+  paras,
   ctaBand,
   picture,
   flow,
@@ -117,6 +118,8 @@ ${ctaBand(lang)}`;
   });
 }
 
+const firstSentence = (text) => (text || "").split(/(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡“"(])/)[0];
+
 export function caseStudy(w, lang) {
   const tr = (es, en) => (lang === "es" ? es : en);
   const paths = { es: workPath(w, "es"), en: workPath(w, "en") };
@@ -166,23 +169,34 @@ export function caseStudy(w, lang) {
   </div>
 </section>
 ${figures ? `<section class="section on-white"><div class="wrap">${figures}</div></section>` : ""}
-<section class="section">
+<section class="section" aria-labelledby="snapshot-title">
   <div class="wrap">
-    <div class="split"><h2>${tr("Contexto", "Context")}</h2><div class="body"><p class="lead">${t(w.context, lang)}</p></div></div>
-    <div class="split"><h2>${tr("El reto", "The challenge")}</h2><div class="body"><p>${t(w.challenge, lang)}</p></div></div>
-    <div class="split"><h2>${tr("La solución", "The solution")}</h2><div class="body"><p>${t(w.solution, lang)}</p>${codeBlock}</div></div>
-    <div class="split"><h2>${tr("Arquitectura", "Architecture")}</h2><div class="body">${flow(w.architecture, lang)}</div></div>
-    <div class="split"><h2>${tr("Funcionalidad principal", "Main functionality")}</h2><div class="body"><ul class="checklist">${w.features.map((f) => `<li>${t(f, lang)}</li>`).join("")}</ul></div></div>
-    <div class="split"><h2>${tr("Tecnologías y para qué", "Technologies and why")}</h2><div class="body">
+    <h2 id="snapshot-title" class="sr-only">${tr("Resumen de", "Summary of")} ${name}</h2>
+    <dl class="snapshot">
+      <div><dt class="mono">${tr("El reto", "Challenge")}</dt><dd>${esc(firstSentence(tx(w.challenge, lang)))}</dd></div>
+      <div><dt class="mono">${tr("La solución", "Solution")}</dt><dd>${esc(firstSentence(tx(w.solution, lang)))}</dd></div>
+      <div><dt class="mono">${tr("El resultado", "Outcome")}</dt><dd>${esc(firstSentence(tx(w.results[0], lang)))}</dd></div>
+    </dl>
+  </div>
+</section>
+<section class="section rule-top">
+  <div class="wrap">
+    <div class="split"><h2>${tr("El reto de", "The challenge behind")} ${name}</h2><div class="body">${paras(w.context, lang)}${paras(w.challenge, lang)}</div></div>
+    <div class="split"><h2>${tr("Cómo construimos", "How we built")} ${name}</h2><div class="body">${paras(w.solution, lang)}${codeBlock}</div></div>
+    <div class="split"><h2>${tr("Arquitectura de", "Architecture of")} ${name}</h2><div class="body">${flow(w.architecture, lang)}</div></div>
+    <div class="split"><h2>${tr("Funciones principales de", "Key features of")} ${name}</h2><div class="body"><ul class="checklist">${w.features.map((f) => `<li>${t(f, lang)}</li>`).join("")}</ul></div></div>
+    <div class="split"><h2>${tr("Stack tecnológico de", "Tech stack of")} ${name}</h2><div class="body">
       <table class="spec-table"><thead><tr><th scope="col">${tr("Tecnología", "Technology")}</th><th scope="col">${tr("Uso", "Purpose")}</th></tr></thead><tbody>
       ${w.stack.map(([a, b]) => `<tr><th scope="row">${esc(tx(a, lang))}</th><td>${t(b, lang)}</td></tr>`).join("")}
       </tbody></table>
     </div></div>
-    <div class="split"><h2>${tr("Contribución de CodeGurex", "CodeGurex contribution")}</h2><div class="body"><p>${t(w.contribution, lang)}</p></div></div>
-    <div class="split"><h2>${tr("Resultados y evidencia", "Results and evidence")}</h2><div class="body">
+    <div class="split"><h2>${tr("Resultados de", "Results of")} ${name}</h2><div class="body">
       <ul class="result-list">${w.results.map((r) => `<li><span>${t(r, lang)}</span></li>`).join("")}</ul>
       ${w.pending ? `<p class="note warn">${t(w.pending, lang)}</p>` : ""}
-      <table class="spec-table"><tbody>${w.evidence.map(([a, b]) => `<tr><th scope="row">${t(a, lang)}</th><td>${t(b, lang)}</td></tr>`).join("")}</tbody></table>
+      <table class="spec-table"><tbody>
+        <tr><th scope="row">${tr("Contribución de CodeGurex", "CodeGurex contribution")}</th><td>${t(w.contribution, lang)}</td></tr>
+        ${w.evidence.map(([a, b]) => `<tr><th scope="row">${t(a, lang)}</th><td>${t(b, lang)}</td></tr>`).join("")}
+      </tbody></table>
     </div></div>
   </div>
 </section>
@@ -192,7 +206,7 @@ ${(() => {
   return `<section class="section rule-top" aria-labelledby="case-services">
   <div class="wrap">
     ${sheetLabel("S", { es: "Servicios demostrados en este caso", en: "Services shown in this case" }, lang)}
-    <h2 id="case-services" class="sr-only">${tr("Servicios relacionados", "Related services")}</h2>
+    <h2 id="case-services" class="sr-only">${tr("Servicios aplicados en", "Services used in")} ${name}</h2>
     <ul class="index">${services
       .map((s) => `<li><a class="index-row" href="${servicePath(s, lang)}"><span class="num">→</span><h3>${t(s.name, lang)}</h3><p>${t(s.short, lang)}</p><span class="go" aria-hidden="true">→</span></a></li>`)
       .join("")}</ul>

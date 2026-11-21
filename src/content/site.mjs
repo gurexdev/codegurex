@@ -78,7 +78,7 @@ export const UI = {
     "Todo lo publicado aquí corresponde a trabajo verificable. Los estados de cada proyecto y producto se indican de forma explícita.",
     "Everything published here is verifiable work. The status of every project and product is stated explicitly.",
   ),
-  location: L("Manta, Manabí, Ecuador · Atención en todo Ecuador y remota", "Manta, Manabí, Ecuador · Serving clients worldwide"),
+  location: L("Manta, Ecuador · Clientes en Ecuador y el exterior · 100 % remoto", "Manta, Ecuador · Clients at home and abroad · Remote-first"),
   privacyPrefs: L("Preferencias de privacidad", "Privacy preferences"),
 };
 

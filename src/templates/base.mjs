@@ -2,7 +2,7 @@ import { SITE, ROUTES, NAV, UI, STATUS, STATUS_TONE, LOCALE } from "../content/s
 import { SERVICES, TRACKS } from "../content/services.mjs";
 import { WORK } from "../content/work.mjs";
 
-export const ASSET_VERSION = "5";
+export const ASSET_VERSION = "6";
 
 /* ---------- Helpers ---------- */
 export const esc = (value) =>
@@ -154,6 +154,31 @@ export const CSP =
  * Render a full HTML page.
  * paths: { es, en } — this page's path in both languages (null for single-language pages).
  */
+/** Split any paragraph longer than ~45 words at sentence boundaries (readability guardrail). */
+function splitLongParagraphs(html) {
+  return html.replace(/<p(\s[^>]*)?>([\s\S]*?)<\/p>/g, (whole, attrs = "", inner) => {
+    const words = inner.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+    if (words <= 45) return whole;
+    const parts = inner.split(/(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡“"(<])/);
+    if (parts.length < 2) return whole;
+    const groups = [];
+    let cur = [];
+    let n = 0;
+    for (const part of parts) {
+      const w = part.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+      if (cur.length && n + w > 40) {
+        groups.push(cur.join(" "));
+        cur = [];
+        n = 0;
+      }
+      cur.push(part);
+      n += w;
+    }
+    if (cur.length) groups.push(cur.join(" "));
+    return groups.map((g, i) => `<p${i === 0 ? attrs : ""}>${g}</p>`).join("");
+  });
+}
+
 export function page({ lang, paths, current, title, description, body, schema = [], robots = "index, follow", ogImage, ogType = "website", canonical = true }) {
   const self = paths[lang];
   const alternate = paths[other(lang)];
@@ -208,7 +233,7 @@ ${graph}
 <a class="skip" href="#main">${t(UI.skip, lang)}</a>
 ${header(lang, current, alternate)}
 <main id="main">
-${body}
+${splitLongParagraphs(body)}
 </main>
 ${footer(lang)}
 <!--/email_off-->
@@ -243,6 +268,30 @@ export function breadcrumbSchema(lang, trail) {
   };
 }
 
+/**
+ * Render a long text as short paragraphs: sentences are grouped until a group passes
+ * ~40 words, so nothing reads like a wall of text. Returns <p> elements.
+ */
+export function paras(value, lang, cls = "") {
+  const text = tx(value, lang) || "";
+  const sentences = text.split(/(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡“"(])/);
+  const groups = [];
+  let current = [];
+  let words = 0;
+  for (const sentence of sentences) {
+    const n = sentence.split(/\s+/).length;
+    if (current.length && words + n > 40) {
+      groups.push(current.join(" "));
+      current = [];
+      words = 0;
+    }
+    current.push(sentence);
+    words += n;
+  }
+  if (current.length) groups.push(current.join(" "));
+  return groups.map((g, i) => `<p${cls && i === 0 ? ` class="${cls}"` : ""}>${esc(g)}</p>`).join("");
+}
+
 export const titleBlock = (rows) =>
   `<dl class="title-block">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>`;
 
@@ -250,7 +299,7 @@ export function ctaBand(lang) {
   return `<section class="section on-ink" aria-labelledby="cta-title">
   <div class="wrap">
     ${sheetLabel("→", { es: "Siguiente paso", en: "Next step" }, lang)}
-    <h2 id="cta-title" class="statement">${lang === "es" ? "¿Qué necesitas <em>construir</em> o <em>proteger</em>?" : "What do you need to <em>build</em> or <em>secure</em>?"}</h2>
+    <p id="cta-title" class="statement">${lang === "es" ? "¿Qué necesitas <em>construir</em> o <em>proteger</em>?" : "What do you need to <em>build</em> or <em>secure</em>?"}</p>
     <div class="cta-band">
       <a href="${route("contact", lang)}?track=build">
         <span class="mono">A · ${t(TRACKS.build.name, lang)} / B · ${t(TRACKS.integrate.name, lang)}</span>

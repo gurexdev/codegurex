@@ -1,5 +1,5 @@
 import { pageMeta, pageH1 } from "../content/seo-helpers.mjs";
-import { SERVICE_SEO, WHERE } from "../content/seo.mjs";
+import { SERVICE_SEO } from "../content/seo.mjs";
 import {
   t,
   tx,
@@ -14,6 +14,7 @@ import {
   crumbs,
   breadcrumbSchema,
   titleBlock,
+  paras,
   ctaBand,
   page,
   SITE,
@@ -211,6 +212,8 @@ export function serviceDetail(service, lang) {
   const ctaHref = `${route("contact", lang)}?track=${isSecurity ? "secure" : "build"}&service=${service.id}`;
   const ctaLabel = isSecurity ? t(UI.requestAssessment, lang) : t(UI.discuss, lang);
 
+  const name = t(seo.h1, lang);
+  const short = t(service.name, lang);
   const body = `
 <section class="page-hero">
   <div class="wrap">
@@ -218,96 +221,85 @@ export function serviceDetail(service, lang) {
     <div class="page-hero-grid">
       <div>
         <p class="mono muted">${track.code} · ${t(track.title, lang)}</p>
-        <h1>${t(seo.h1, lang)}</h1>
+        <h1>${name}</h1>
         <p class="lead">${t(service.short, lang)}</p>
-        <div class="actions"><a class="btn btn-blue" href="${ctaHref}">${ctaLabel}</a></div>
+        <div class="actions"><a class="btn btn-blue" href="${ctaHref}">${ctaLabel}</a>${evidence.length ? `<a class="btn btn-line" href="#evidence-title">${tr("Ver proyectos reales", "See real projects")}</a>` : ""}</div>
       </div>
       ${titleBlock([
-        [tr("División", "Division"), t(track.name, lang)],
-        [tr("Para", "For"), t(service.audience[0], lang)],
+        [tr("Modalidad", "Engagement"), tr("100 % remoto · ES / EN", "100% remote · EN / ES")],
+        [tr("Ideal para", "Best for"), t(service.audience[0], lang)],
         [tr("Entregables", "Deliverables"), String(service.deliverables.length)],
-        [tr("Fases", "Phases"), String(steps.length)],
+        [tr("Zona horaria", "Time zone"), tr("GMT-5 · alineada con EE. UU.", "GMT-5 · aligned with the US")],
       ])}
     </div>
   </div>
 </section>
-<section class="section">
-  <div class="wrap">
-    <div class="split">
-      <h2>${tr("El problema", "The problem")}</h2>
-      <div class="body"><p class="lead">${t(service.problem, lang)}</p>${service.note ? `<p class="note">${t(service.note, lang)}</p>` : ""}</div>
+<section class="section" aria-labelledby="problem-title">
+  <div class="wrap svc-intro">
+    <div>
+      <h2 id="problem-title">${tr("El problema que resuelve", "The problem it solves")}: ${short.toLowerCase()}</h2>
+      ${paras(service.problem, lang)}
+      ${service.note ? `<p class="note">${t(service.note, lang)}</p>` : ""}
     </div>
-    <div class="split">
-      <h2>${tr("Para quién", "Who it is for")}</h2>
-      <div class="body"><ul class="checklist">${service.audience.map((a) => `<li>${t(a, lang)}</li>`).join("")}</ul></div>
-    </div>
-    <div class="split">
-      <h2>${tr("Qué incluye", "What is included")}</h2>
-      <div class="body"><ul class="checklist cols">${service.included.map((a) => `<li>${t(a, lang)}</li>`).join("")}</ul></div>
-    </div>
-    <div class="split">
-      <h2>${tr("Entregables", "Deliverables")}</h2>
-      <div class="body">
-        <table class="spec-table"><thead><tr><th scope="col">#</th><th scope="col">${tr("Entregable", "Deliverable")}</th></tr></thead><tbody>
-        ${service.deliverables.map((d, i) => `<tr><th scope="row">D${i + 1}</th><td>${t(d, lang)}</td></tr>`).join("")}
-        </tbody></table>
-      </div>
-    </div>
-    <div class="split">
-      <h2>${tr("Por qué con CodeGurex", "Why CodeGurex")}</h2>
-      <div class="body"><p>${t(seo.why, lang)}</p></div>
-    </div>
-    <div class="split">
-      <h2>${tr("Capacidades técnicas", "Technical capabilities")}</h2>
-      <div class="body"><ul class="tags">${service.capabilities.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>
-      <a class="arrow-link" href="${route("technology", lang)}">${tr("Cómo usamos estas tecnologías", "How we use these technologies")}</a></div>
+    <div>
+      <h3 class="mono muted">${tr("Ideal para", "Best for")}</h3>
+      <ul class="checklist">${service.audience.map((a) => `<li>${t(a, lang)}</li>`).join("")}</ul>
     </div>
   </div>
 </section>
-<section class="section ${isSecurity ? "on-ink" : "on-white rule-top"}" aria-labelledby="engagement">
+<section class="section on-white rule-top" aria-labelledby="included-title">
   <div class="wrap">
-    ${sheetLabel("→", L("Cómo trabajamos", "How the engagement works"), lang)}
-    <div class="section-head">
-      <h2 id="engagement">${isSecurity ? tr("Evaluación autorizada, de principio a fin.", "Authorized assessment, end to end.") : tr("Del descubrimiento a la operación.", "From discovery to operation.")}</h2>
-      <p>${
-        isSecurity
-          ? tr("Solo evaluamos sistemas propios del cliente o expresamente autorizados por escrito. No pidas ni envíes credenciales por canales públicos.", "We only assess systems owned by the client or explicitly authorized in writing. Never share credentials through public channels.")
-          : tr("Cada fase se revisa contigo antes de avanzar. El código, la documentación y los accesos son tuyos.", "Every phase is reviewed with you before moving on. The code, documentation and access are yours.")
-      }</p>
+    <h2 id="included-title" class="section-title">${tr("Qué incluye", "What's included")}: ${short}</h2>
+    <div class="svc-grid">
+      <div>
+        <h3 class="mono muted">${tr("Alcance", "Scope")}</h3>
+        <ul class="checklist">${service.included.map((a) => `<li>${t(a, lang)}</li>`).join("")}</ul>
+      </div>
+      <div>
+        <h3 class="mono muted">${tr("Entregables", "Deliverables")}</h3>
+        <ol class="deliverables">${service.deliverables.map((d) => `<li>${t(d, lang)}</li>`).join("")}</ol>
+        <h3 class="mono muted">Stack</h3>
+        <ul class="tags">${service.capabilities.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>
+      </div>
     </div>
+    <div class="why">
+      <h3>${tr("Por qué elegir CodeGurex", "Why choose CodeGurex")}</h3>
+      ${paras(seo.why, lang)}
+    </div>
+  </div>
+</section>
+<section class="section ${isSecurity ? "on-ink" : "rule-top"}" aria-labelledby="engagement">
+  <div class="wrap">
+    ${sheetLabel("→", L("Proceso", "Process"), lang)}
+    <h2 id="engagement" class="section-title">${tr("Cómo trabajamos", "How we work")}: ${short.toLowerCase()} ${tr("en", "in")} ${steps.length} ${tr("fases", "phases")}</h2>
     <ol class="process steps-${steps.length}">${steps.map(([a, b]) => `<li><h3>${t(a, lang)}</h3><p>${t(b, lang)}</p></li>`).join("")}</ol>
+    ${isSecurity ? `<p class="note">${tr("Solo evaluamos sistemas propios del cliente o autorizados por escrito.", "We only assess systems the client owns or has authorized in writing.")}</p>` : ""}
   </div>
 </section>
 ${
   evidence.length
-    ? `<section class="section" aria-labelledby="evidence-title"><div class="wrap">
+    ? `<section class="section on-white rule-top" aria-labelledby="evidence-title"><div class="wrap">
   ${sheetLabel("E", L("Evidencia", "Evidence"), lang)}
-  <h2 id="evidence-title" class="sr-only">${tr("Trabajo relacionado", "Related work")}</h2>
+  <h2 id="evidence-title" class="section-title">${tr("Proyectos reales", "Real projects")}: ${short}</h2>
   <ul class="index">${evidence
     .map(
-      (w) => `<li><a class="index-row" href="${workPath(w, lang)}"><span class="num">${statusTag(w.status, lang)}</span><h3>${esc(tx(w.name, lang))}</h3><p>${t(w.summary, lang)}</p><span class="go" aria-hidden="true">→</span></a></li>`,
+      (w) => `<li><a class="index-row" href="${workPath(w, lang)}"><span class="num">${statusTag(w.status, lang)}</span><h3>${esc(tx(w.name, lang))}</h3><p>${t(w.kind, lang)}</p><span class="go" aria-hidden="true">→</span></a></li>`,
     )
     .join("")}</ul>
 </div></section>`
     : ""
 }
-<section class="section on-white rule-top" aria-labelledby="faq-title">
+<section class="section rule-top" aria-labelledby="faq-title">
   <div class="wrap">
-    ${sheetLabel("?", L("Preguntas frecuentes", "Frequently asked questions"), lang)}
-    <div class="split">
-      <h2 id="faq-title">${tr("Preguntas frecuentes sobre", "Questions about")} ${t(service.name, lang).toLowerCase()}</h2>
-      <div class="body faq">${seo.faq.map(([q, a]) => `<h3>${t(q, lang)}</h3><p>${t(a, lang)}</p>`).join("")}</div>
-    </div>
-    <div class="split">
-      <h2>${tr("Dónde trabajamos", "Where we work")}</h2>
-      <div class="body"><p>${t(WHERE, lang)}</p></div>
-    </div>
+    ${sheetLabel("?", L("Preguntas frecuentes", "FAQ"), lang)}
+    <h2 id="faq-title" class="section-title">${tr("Preguntas frecuentes sobre", "Questions about")} ${short.toLowerCase()}</h2>
+    <div class="faq-list">${seo.faq.map(([q, a]) => `<details><summary>${t(q, lang)}</summary>${paras(a, lang)}</details>`).join("")}</div>
   </div>
 </section>
-<section class="section rule-top" aria-labelledby="related-title">
+<section class="section on-white rule-top" aria-labelledby="related-title">
   <div class="wrap">
     ${sheetLabel(track.code, L("Servicios relacionados", "Related services"), lang)}
-    <h2 id="related-title" class="sr-only">${tr("Servicios relacionados", "Related services")}</h2>
+    <h2 id="related-title" class="sr-only">${tr("Otros servicios relacionados con", "Other services related to")} ${short}</h2>
     <ul class="index">${related
       .map((s) => `<li><a class="index-row" href="${servicePath(s, lang)}"><span class="num">${track.code}</span><h3>${t(s.name, lang)}</h3><p>${t(s.short, lang)}</p><span class="go" aria-hidden="true">→</span></a></li>`)
       .join("")}</ul>
@@ -323,7 +315,7 @@ ${ctaBand(lang)}`;
       description: tx(service.short, lang),
       serviceType: tx(track.title, lang),
       provider: { "@id": `${SITE.origin}/#organization` },
-      areaServed: [{ "@type": "Country", name: "Ecuador" }, "Worldwide"],
+      areaServed: "Worldwide",
       url: `${SITE.origin}${paths[lang]}`,
     },
   ];
