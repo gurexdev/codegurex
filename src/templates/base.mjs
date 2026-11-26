@@ -148,7 +148,7 @@ function footer(lang) {
 
 /* ---------- Document ---------- */
 export const CSP =
-  "default-src 'self'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; style-src 'self'; script-src 'self' https://www.googletagmanager.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests";
+  "default-src 'self'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; style-src 'self'; script-src 'self' https://www.googletagmanager.com https://static.cloudflareinsights.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests";
 
 /**
  * Render a full HTML page.

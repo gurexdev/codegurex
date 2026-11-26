@@ -126,6 +126,11 @@ ${ARTICLES.map((a) => `- [${a.h1.en}](${SITE.origin}${articlePath(a, "en")}): ${
 `,
   );
 }
+// IndexNow key file (public by design) so search engines can verify our submissions.
+{
+  const { INDEXNOW_KEY } = await import("./scripts/indexnow.mjs");
+  await write(`${INDEXNOW_KEY}.txt`, INDEXNOW_KEY);
+}
 await write("robots.txt", `User-agent: *\nAllow: /\n\nSitemap: ${SITE.origin}/sitemap.xml\n`);
 
 // ---------- Manifest, headers, brand mark ----------
