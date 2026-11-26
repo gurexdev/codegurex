@@ -114,7 +114,7 @@ export function home(lang) {
 
 <section class="global-strip" aria-labelledby="global-title">
   <div class="wrap">
-    <h2 id="global-title" class="mono">${tr("Equipo remoto para clientes de cualquier país", "A remote team for clients in any country")}</h2>
+    <h2 id="global-title" class="mono">${tr("Equipo remoto para clientes de cualquier país", "A remote team for clients in any country")} · <a href="${lang === "es" ? "/desarrollo-de-software-manta/" : "/en/software-development-ecuador/"}">${tr("con base en Manta, Ecuador", "based in Manta, Ecuador")}</a></h2>
     <ul>
       <li><strong>GMT-5</strong><span>${tr("Horario alineado con EE. UU. y Latinoamérica", "Working hours aligned with the US and Latin America")}</span></li>
       <li><strong>USD</strong><span>${tr("Facturación en dólares estadounidenses", "Billing in US dollars")}</span></li>
@@ -140,7 +140,7 @@ export function home(lang) {
         "Desarrollamos productos propios —CodeGurex Sentinel, BARBUS, CostFlow— y herramientas internas. Cada uno muestra su estado real.",
         "We build our own products — CodeGurex Sentinel, BARBUS, CostFlow — and internal tools. Each shows its real status.",
       )}</p>
-      <a class="arrow-link" href="${route("products", lang)}">${tr("Productos de CodeGurex", "CodeGurex products")}</a>
+      <span class="actions"><a class="arrow-link" href="${route("solutions", lang)}">${tr("Soluciones por necesidad de negocio", "Solutions by business need")}</a> <a class="arrow-link" href="${route("products", lang)}">${tr("Productos de CodeGurex", "CodeGurex products")}</a></span>
     </div>
   </div>
 </section>
@@ -232,7 +232,7 @@ ${ctaBand(lang)}`;
       address: { "@type": "PostalAddress", addressLocality: "Manta", addressRegion: "Manabí", addressCountry: "EC" },
       areaServed: [{ "@type": "Place", name: "Worldwide" }, { "@type": "Country", name: "Ecuador" }],
       foundingLocation: { "@type": "Place", name: "Manta, Ecuador" },
-      founder: { "@type": "Person", name: "Jose Alejandro Gutierrez Guerrero", jobTitle: "CEO & Founder" },
+      founder: { "@type": "Person", "@id": `${SITE.origin}/#founder`, name: "Jose Alejandro Gutierrez Guerrero" },
       sameAs: [SITE.linkedin, SITE.github],
       contactPoint: {
         "@type": "ContactPoint",

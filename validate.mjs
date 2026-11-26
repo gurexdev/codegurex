@@ -124,6 +124,8 @@ for (const [url, { file, html }] of pages) {
   const canonical = html.match(/<link rel="canonical" href="([^"]+)">/)?.[1];
   if (canonical !== ORIGIN + url) fail(file, `canonical ${canonical} does not match ${ORIGIN + url}`);
   if (!/property="og:image" content="https:\/\/codegurex\.com\/assets\/og-(es|en)\.png"/.test(html)) fail(file, "missing og:image");
+  if (!/property="og:image:alt" content="[^"]+"/.test(html)) fail(file, "missing og:image:alt");
+  if (!/name="robots" content="index, follow, max-image-preview:large/.test(html)) fail(file, "robots meta should allow large image previews and snippets");
 
   // hreflang must be reciprocal.
   const alt = Object.fromEntries([...html.matchAll(/hreflang="(es|en|x-default)" href="([^"]+)"/g)].map((m) => [m[1], m[2]]));

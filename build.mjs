@@ -29,9 +29,10 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 
 // ---------- Pages ----------
-const pages = []; // { paths: {es,en}, priority }
-const add = (paths, priority, render) => {
-  pages.push({ paths, priority });
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
+const pages = []; // { paths: {es,en}, priority, lastmod }
+const add = (paths, priority, render, lastmod = BUILD_DATE) => {
+  pages.push({ paths, priority, lastmod });
   return Promise.all(LANGS.map((lang) => write(paths[lang], render(lang))));
 };
 
@@ -53,7 +54,7 @@ await add(ROUTES.contact, "0.8", contact);
 await add(ROUTES.privacy, "0.2", privacy);
 await add(ROUTES.blog, "0.7", blogIndex);
 for (const a of ARTICLES) {
-  await add({ es: articlePath(a, "es"), en: articlePath(a, "en") }, "0.7", (lang) => article(a, lang));
+  await add({ es: articlePath(a, "es"), en: articlePath(a, "en") }, "0.7", (lang) => article(a, lang), a.updated || a.published);
 }
 await add({ es: localPath("es"), en: localPath("en") }, "0.9", localLanding);
 await write("404.html", notFound());
@@ -72,11 +73,11 @@ for (const [file, value] of Object.entries(LEGACY)) {
 // ---------- Sitemap (with hreflang alternates) ----------
 const loc = (p) => `${SITE.origin}${p}`;
 const urls = pages
-  .flatMap(({ paths, priority }) =>
+  .flatMap(({ paths, priority, lastmod }) =>
     LANGS.map(
       (lang) => `  <url>
     <loc>${loc(paths[lang])}</loc>
-    <lastmod>${SITE.updated}</lastmod>
+    <lastmod>${lastmod}</lastmod>
     <priority>${priority}</priority>
     <xhtml:link rel="alternate" hreflang="es" href="${loc(paths.es)}"/>
     <xhtml:link rel="alternate" hreflang="en" href="${loc(paths.en)}"/>
