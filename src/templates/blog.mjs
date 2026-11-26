@@ -148,6 +148,7 @@ ${ctaBand(lang)}`;
     description: tx(a.description, lang),
     body,
     ogType: "article",
+    articleMeta: { published: a.published, modified: a.updated || a.published, author: AUTHOR.name, section: tx(a.topic, lang) },
     schema: [
       breadcrumbSchema(lang, trail),
       {
@@ -160,7 +161,7 @@ ${ctaBand(lang)}`;
         mainEntityOfPage: `${SITE.origin}${paths[lang]}`,
         image: `${SITE.origin}/assets/og-${lang}.png`,
         wordCount: wordCount(a, lang),
-        author: { "@type": "Person", name: AUTHOR.name, jobTitle: tx(AUTHOR.role, lang), url: founderUrl },
+        author: { "@type": "Person", "@id": `${SITE.origin}/#founder`, name: AUTHOR.name, jobTitle: tx(AUTHOR.role, lang), url: founderUrl },
         publisher: { "@id": `${SITE.origin}/#organization` },
       },
     ],

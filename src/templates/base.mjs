@@ -179,7 +179,7 @@ function splitLongParagraphs(html) {
   });
 }
 
-export function page({ lang, paths, current, title, description, body, schema = [], robots = "index, follow", ogImage, ogType = "website", canonical = true }) {
+export function page({ lang, paths, current, title, description, body, schema = [], robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1", ogImage, ogType = "website", canonical = true, articleMeta = null }) {
   const self = paths[lang];
   const alternate = paths[other(lang)];
   const image = ogImage || `${SITE.origin}/assets/og-${lang}.png`;
@@ -220,6 +220,12 @@ ${canonical ? `<link rel="canonical" href="${absolute(self)}">
 <meta property="og:image" content="${image}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(lang === "es" ? "CodeGurex — desarrollo de software y ciberseguridad" : "CodeGurex — software development and cybersecurity")}">
+<meta name="twitter:image:alt" content="${esc(lang === "es" ? "CodeGurex — desarrollo de software y ciberseguridad" : "CodeGurex — software development and cybersecurity")}">${
+  articleMeta
+    ? `\n<meta property="article:published_time" content="${articleMeta.published}">\n<meta property="article:modified_time" content="${articleMeta.modified}">\n<meta property="article:author" content="${esc(articleMeta.author)}">\n<meta property="article:section" content="${esc(articleMeta.section)}">`
+    : ""
+}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(description)}">

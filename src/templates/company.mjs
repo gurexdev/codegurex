@@ -433,7 +433,7 @@ export function about(lang) {
         )}</p>
       </div>
       ${titleBlock([
-        [tr("Origen", "Origin"), "Manta, Ecuador"],
+        [tr("Origen", "Origin"), `<a href="${lang === "es" ? "/desarrollo-de-software-manta/" : "/en/software-development-ecuador/"}">Manta, Ecuador</a>`],
         [tr("Atención", "Service"), tr("Internacional · remoto", "International · remote")],
         [tr("Software para clientes", "Client software"), tr("Desde 2022", "Since 2022")],
         [tr("Idiomas", "Languages"), tr("Español · Inglés", "Spanish · English")],
@@ -514,7 +514,19 @@ ${ctaBand(lang)}`;
         "@type": "AboutPage",
         name: tr("Sobre CodeGurex", "About CodeGurex"),
         url: `${SITE.origin}${ROUTES.about[lang]}`,
-        about: { "@type": "Organization", name: "CodeGurex", url: `${SITE.origin}/` },
+        about: { "@id": `${SITE.origin}/#organization` },
+        mainEntity: { "@id": `${SITE.origin}/#founder` },
+      },
+      {
+        "@type": "Person",
+        "@id": `${SITE.origin}/#founder`,
+        name: "Jose Alejandro Gutierrez Guerrero",
+        jobTitle: "CEO & Founder",
+        url: `${SITE.origin}${ROUTES.about[lang]}#${lang === "es" ? "fundador" : "founder"}`,
+        worksFor: { "@type": "Organization", "@id": `${SITE.origin}/#organization`, name: "CodeGurex", url: `${SITE.origin}/` },
+        homeLocation: { "@type": "Place", name: "Manta, Ecuador" },
+        sameAs: [SITE.linkedin, SITE.github],
+        knowsAbout: ["Software engineering", "Next.js", "PostgreSQL", "Supabase Row Level Security", "Application security", "OWASP", "Cloudflare Workers"],
       },
     ],
   });
