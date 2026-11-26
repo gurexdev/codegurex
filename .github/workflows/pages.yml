@@ -40,3 +40,8 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Notify search engines (IndexNow)
+        continue-on-error: true
+        run: |
+          sleep 30
+          node scripts/indexnow.mjs

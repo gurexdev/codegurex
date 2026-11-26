@@ -38,6 +38,8 @@ node scripts/qa.mjs   # QA en navegador (Playwright): responsive, consola, compo
 | [docs/SECURITY.md](docs/SECURITY.md) | Revisión de seguridad y limitaciones |
 | [docs/TESTING.md](docs/TESTING.md) | Informe de pruebas |
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Despliegue, rollback y cómo añadir contenido |
+| [docs/SEO-PLAN.md](docs/SEO-PLAN.md) | Plan SEO y cambios aplicados |
+| [docs/LAUNCH-KIT.md](docs/LAUNCH-KIT.md) | Kit de lanzamiento: indexación, perfiles, enlaces y primeros clientes |
 
 ## Principio editorial
 
